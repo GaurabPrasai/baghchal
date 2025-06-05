@@ -1,5 +1,6 @@
 import React from "react";
 import "./BaghChalBoard.css";
+import Node from "./Node";
 
 const BaghChalBoard = () => {
   const boardSize = 4; // 5x5 grid (0-4 indices)
@@ -118,29 +119,34 @@ const BaghChalBoard = () => {
 
   // Generate intersection points
   const renderNodes = () => {
-    const points = [];
-
+    const nodes = [];
     for (let row = 0; row <= boardSize; row++) {
       for (let col = 0; col <= boardSize; col++) {
         const x = padding + col * cellSize;
         const y = padding + row * cellSize;
+        const nodeKey = `${row}-${col}`;
+        // const pieceType = gameState.board[nodeKey] || null;
+        const pieceType = null;
 
-        points.push(
-          <circle
-            key={`point-${row}-${col}`}
-            cx={x}
-            cy={y}
-            r={pointRadius}
-            className="fill-white stroke-gray-700 stroke-2 hover:fill-gray-300 cursor-pointer"
-            style={{ strokeWidth: 2 }}
-            data-row={row}
-            data-col={col}
+        nodes.push(
+          <Node
+            key={nodeKey}
+            x={x}
+            y={y}
+            row={row}
+            col={col}
+            radius={pointRadius}
+            pieceType={pieceType}
+            // isSelected={gameState.selectedNode === nodeKey}
+            // isHighlighted={gameState.highlightedNodes.includes(nodeKey)}
+            // onClick={handleNodeClick}
+            // onHover={handleNodeHover}
           />
         );
       }
     }
 
-    return points;
+    return nodes;
   };
 
   return (
