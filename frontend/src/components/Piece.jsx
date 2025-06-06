@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-// Node Component - handles individual board positions
-const Node = ({
+// Piece Component - handles individual board positions
+const Piece = ({
   x,
   y,
   row,
@@ -154,4 +154,4 @@ const Node = ({
   );
 };
 
-export default Node;
+export default Piece;

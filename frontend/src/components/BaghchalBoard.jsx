@@ -1,13 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import "./BaghChalBoard.css";
-import Node from "./Node";
+import Piece from "./Piece";
 
 const BaghChalBoard = () => {
   const boardSize = 4; // 5x5 grid (0-4 indices)
-  const cellSize = 160;
-  const padding = 30;
-  const pointRadius = 25;
+  const cellSize = 180;
+  const padding = 35;
+  const pieceRadius = 35;
   const svgSize = padding * 2 + boardSize * cellSize;
+
+  const [gameState, setGameState] = useState({
+    board: {
+      // tigers at four corners
+      "0-0": "tiger",
+      "0-4": "tiger",
+      "4-0": "tiger",
+      "4-4": "tiger",
+      // goats for demo only
+      "1-1": "goat",
+      "1-3": "goat",
+      "3-1": "goat",
+    },
+    selectedPiece: null,
+    // highlightedPieces: [],
+    currentPlayer: "goat",
+    phase: "placement",
+  });
+
+  const handlePieceClick = (row, col, pieceType) => {
+    const pieceKey = `${row}-${col}`;
+
+    // select unselect
+    if (gameState.selectedPiece === pieceKey) {
+      setGameState((prev) => ({
+        ...prev,
+        selectedPiece: null,
+        // highlightedPieces: [],
+      }));
+      console.log(gameState.highlightedPieces);
+      console.log(
+        `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
+      );
+    } else {
+      setGameState((prev) => ({
+        ...prev,
+        selectedPiece: pieceKey,
+        // highlightedPieces: [...prev.highlightedPieces, pieceKey],
+      }));
+      console.log(
+        `selected Piece at (${row}, ${col}) with piece: ${pieceType}`
+      );
+    }
+  };
+
+  const handlePieceHover = (row, col, isEntering) => {
+    // console.log(`${isEntering ? "Entering" : "Leaving"} Piece at (${row}, ${col})`);
+    // if the player and Piece type are same then hghlight the border with green
+  };
 
   // Generate grid lines (horizontal and vertical)
   const renderGridLines = () => {
@@ -118,51 +167,46 @@ const BaghChalBoard = () => {
   };
 
   // Generate intersection points
-  const renderNodes = () => {
-    const nodes = [];
+  const renderPieces = () => {
+    const pieces = [];
     for (let row = 0; row <= boardSize; row++) {
       for (let col = 0; col <= boardSize; col++) {
         const x = padding + col * cellSize;
         const y = padding + row * cellSize;
-        const nodeKey = `${row}-${col}`;
-        // const pieceType = gameState.board[nodeKey] || null;
-        const pieceType = null;
-
-        nodes.push(
-          <Node
-            key={nodeKey}
+        const pieceKey = `${row}-${col}`;
+        const pieceType = gameState.board[pieceKey] || null;
+        pieces.push(
+          <Piece
+            key={pieceKey}
             x={x}
             y={y}
             row={row}
             col={col}
-            radius={pointRadius}
+            radius={pieceRadius}
             pieceType={pieceType}
-            // isSelected={gameState.selectedNode === nodeKey}
-            // isHighlighted={gameState.highlightedNodes.includes(nodeKey)}
-            // onClick={handleNodeClick}
-            // onHover={handleNodeHover}
+            isSelected={gameState.selectedPiece === pieceKey}
+            // isHighlighted={gameState.highlightedPieces.includes(pieceKey)}
+            onClick={handlePieceClick}
+            onHover={handlePieceHover}
           />
         );
       }
     }
 
-    return nodes;
+    return pieces;
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-5">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Bagh Chal</h1>
+      {/* <h1 className="text-3xl font-bold text-gray-800 mb-8">Bagh Chal</h1> */}
 
       <div className="bg-white border-2 border-gray-600 rounded-lg p-5 shadow-lg">
         <svg width={svgSize} height={svgSize} className="bg-white">
-          {/* Grid lines */}
           <g>{renderGridLines()}</g>
 
-          {/* Diagonal lines */}
           <g>{renderDiagonalLines()}</g>
 
-          {/* Intersection points */}
-          <g>{renderNodes()}</g>
+          <g>{renderPieces()}</g>
         </svg>
       </div>
 
