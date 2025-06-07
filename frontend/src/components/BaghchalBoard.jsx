@@ -22,35 +22,40 @@ const BaghChalBoard = () => {
       "3-1": "goat",
     },
     selectedPiece: null,
+    activePiece: null,
+    unusedGoat: 24,
+    deadGoatCount: 0,
     // highlightedPieces: [],
-    currentPlayer: "goat",
-    phase: "placement",
+    currentPlayer: "tiger", // 'goat' or 'tiger'
+    phase: "placement", // when all goats are spawned it should be changed to 'displacement'
   });
 
   const handlePieceClick = (row, col, pieceType) => {
     const pieceKey = `${row}-${col}`;
 
-    // select unselect
-    if (gameState.selectedPiece === pieceKey) {
-      setGameState((prev) => ({
-        ...prev,
-        selectedPiece: null,
-        // highlightedPieces: [],
-      }));
-      console.log(gameState.highlightedPieces);
-      console.log(
-        `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
-      );
-    } else {
-      setGameState((prev) => ({
-        ...prev,
-        selectedPiece: pieceKey,
-        // highlightedPieces: [...prev.highlightedPieces, pieceKey],
-      }));
-      console.log(
-        `selected Piece at (${row}, ${col}) with piece: ${pieceType}`
-      );
+    if (isValidSelection(pieceKey, pieceType)) {
+      if (gameState.selectedPiece === pieceKey) {
+        setGameState((prev) => ({
+          ...prev,
+          selectedPiece: null,
+          // highlightedPieces: [],
+        }));
+        console.log(gameState.highlightedPieces);
+        console.log(
+          `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
+        );
+      } else {
+        setGameState((prev) => ({
+          ...prev,
+          selectedPiece: pieceKey,
+          // highlightedPieces: [...prev.highlightedPieces, pieceKey],
+        }));
+        console.log(
+          `selected Piece at (${row}, ${col}) with piece: ${pieceType}`
+        );
+      }
     }
+    // select unselect
   };
 
   const handlePieceHover = (row, col, isEntering) => {
@@ -194,6 +199,32 @@ const BaghChalBoard = () => {
     }
 
     return pieces;
+  };
+
+  const isValidSelection = (pieceKey, pieceType) => {
+    // for goat
+    if (gameState.currentPlayer === "goat") {
+      if (gameState.phase === "placement" && pieceType === null) {
+        return true;
+      } else if (gameState.phase === "displacement" && pieceType == "goat") {
+        setGameState((prev) => ({ ...prev, activePiece: pieceKey }));
+        return true;
+      } else if (gameState.phase == "displacement" && gameState.activePiece) {
+        return true;
+      }
+    }
+
+    // for tiger
+    if (gameState.currentPlayer === "tiger") {
+      if (pieceType === "tiger") {
+        setGameState((prev) => ({ ...prev, activePiece: pieceKey }));
+        return true;
+      } else if (!pieceType && gameState.activePiece) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
   return (
