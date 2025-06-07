@@ -29,6 +29,8 @@ const BaghChalBoard = () => {
     phase: "placement", // when all goats are spawned it should be changed to 'displacement'
   });
 
+  // add useEffect here to update state variables when
+
   const handlePieceClick = (row, col, pieceType) => {
     const pieceKey = `${row}-${col}`;
 
