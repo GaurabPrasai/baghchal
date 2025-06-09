@@ -208,7 +208,11 @@ const Board = () => {
       } else if (gameState.phase === "displacement" && pieceType == "goat") {
         setGameState((prev) => ({ ...prev, activePiece: pieceKey }));
         return true;
-      } else if (gameState.phase == "displacement" && gameState.activePiece) {
+      } else if (
+        gameState.phase == "displacement" &&
+        gameState.activePiece &&
+        !pieceType
+      ) {
         return true;
       }
     }
