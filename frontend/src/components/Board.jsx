@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Piece from "./Piece";
 
-const BaghChalBoard = () => {
+const Board = () => {
   const boardSize = 4; // 5x5 grid (0-4 indices)
   const cellSize = 180;
   const pieceRadius = 40;
@@ -25,8 +25,8 @@ const BaghChalBoard = () => {
     unusedGoat: 24,
     deadGoatCount: 0,
     // highlightedPieces: [],
-    currentPlayer: "tiger", // 'goat' or 'tiger'
-    phase: "placement", // when all goats are spawned it should be changed to 'displacement'
+    currentPlayer: "goat", // 'goat' or 'tiger'
+    phase: "displacement", // when all goats are spawned it should be changed to 'displacement'
   });
 
   // add useEffect here to update state variables when
@@ -41,7 +41,6 @@ const BaghChalBoard = () => {
           selectedPiece: null,
           // highlightedPieces: [],
         }));
-        // console.log(gameState.highlightedPieces);
         console.log(
           `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
         );
@@ -249,4 +248,4 @@ const BaghChalBoard = () => {
   );
 };
 
-export default BaghChalBoard;
+export default Board;

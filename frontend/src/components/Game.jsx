@@ -1,9 +1,8 @@
-import BaghChalBoard from "./BaghchalBoard";
-
+import Board from "./Board";
 const Game = () => {
   return (
     <>
-      <BaghChalBoard />
+      <Board />
     </>
   );
 };
