@@ -1,17 +1,35 @@
+import { useEffect, useRef } from "react";
 import Board from "./Board";
-const Game = () => {
-  const handleMoveSend = (message) => {
-    const wsUrl = import.meta.env.VITE_WS_URL;
-    console.log(wsUrl);
-    const socket = new WebSocket(wsUrl);
-    // open a websocket
-    socket.addEventListener("open", (event) => {
-      socket.send(JSON.stringify({ message: message }));
-    });
 
-    socket.addEventListener("message", (event) => {
-      console.log("Message from server ", event.data);
-    });
+const Game = () => {
+  const socketRef = useRef();
+
+  useEffect(() => {
+    const wsUrl = import.meta.env.VITE_WS_URL;
+    // console.log(wsUrl);
+    socketRef.current = new WebSocket(wsUrl);
+
+    socketRef.current.onopen = () => {
+      console.log("websocket connected");
+    };
+
+    socketRef.current.onmessage = (event) => {
+      console.log("message from server ", event.data);
+    };
+
+    socketRef.current.onclose = (event) => {
+      console.log("websocket closed");
+    };
+
+    return () => {
+      socketRef.current.close();
+    };
+  }, []);
+
+  const handleMoveSend = (message) => {
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(JSON.stringify({ message: message }));
+    }
   };
 
   return (
