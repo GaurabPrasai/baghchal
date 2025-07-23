@@ -1,8 +1,8 @@
 from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
-from .core.game_state import game_boards
-from .core.utils import get_initial_board, process_move
+from .core.gameState import game_states
+from .core.utils import get_initial_game_state, update_game_state
 # from board import process_move, get_new_board
 
 class GameConsumer(WebsocketConsumer):
@@ -12,13 +12,13 @@ class GameConsumer(WebsocketConsumer):
         self.accept()
         print("websocket connected")
 
-        if self.room_name not in game_boards:
-            game_boards[self.room_name] = get_initial_board()
+        if self.room_name not in game_states:
+            game_states[self.room_name] = get_initial_game_state()
         
         self.send(text_data=json.dumps({
                     "message": {
                         "type": "init",
-                        "board": game_boards[self.room_name]
+                        "board": game_states[self.room_name]
                     }
                 }))
         
@@ -27,11 +27,11 @@ class GameConsumer(WebsocketConsumer):
         move = json.loads(text_data)['message']
         print(f"text data received: {move}")
 
-        updated_board = process_move(self.room_name, move)
+        new_game_state = update_game_state(self.room_name, move)
         
         event = {
             "type" :"send_board",
-            'board': updated_board
+            'board': new_game_state
         }
         async_to_sync(self.channel_layer.group_send)(self.room_name, event)
 
