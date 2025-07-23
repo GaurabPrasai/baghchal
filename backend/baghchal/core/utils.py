@@ -25,7 +25,7 @@ def update_game_state(room_name, move):
     current_player = game_state["currentPlayer"]
 
     if not isvalid_move(game_state, move):
-        return None
+        return {"error": "invalid move"}
 
     move_type = move["moveType"]
     from_key = move.get("fromKey")
