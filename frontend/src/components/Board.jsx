@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Piece from "./Piece";
 import ValidateMove from "./utilities/MoveValidation.js";
 
-const Board = ({ board, onMoveSend }) => {
+const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
   const boardSize = 4;
   const cellSize = 180;
   const pieceRadius = 40;
@@ -10,58 +10,29 @@ const Board = ({ board, onMoveSend }) => {
   const svgSize = padding * 2 + boardSize * cellSize;
 
   const [boardState, setboardState] = useState({
-    // board: {
-    //   // tigers at four corners
-    //   "0-0": "tiger",
-    //   "0-4": "tiger",
-    //   "4-0": "tiger",
-    //   "4-4": "tiger",
-    //   // goats for demo only
-    //   "1-1": "goat",
-    //   "1-3": "goat",
-    //   "3-1": "goat",
-    // },
-    // board: board,
     selectedPiece: null,
     activePiece: null, // this is the non-null piece clicked before clicking a null piece
-    unusedGoat: 24,
-    deadGoatCount: 0,
     // highlightedPieces: [],
-    currentPlayer: "tiger", // 'goat' or 'tiger'
-    phase: "placement", // either placement or displacement
   });
 
-  // add useEffect here to update state variables when
-
+  // handle piece clicks
   const handlePieceClick = (row, col, pieceType) => {
     const pieceKey = `${row}-${col}`;
     handleSelection(row, col, pieceType);
 
-    // check if the move is valid
     const fromKey = boardState.activePiece;
     const toKey = pieceKey;
     const moveType =
       ValidateMove(fromKey, toKey, board[boardState.activePiece], board) ||
-      (boardState.phase == "placement" &&
-      !board[pieceKey] &&
-      boardState.currentPlayer == "goat"
+      (phase == "placement" && !board[pieceKey] && currentPlayer == "goat"
         ? "place"
         : "");
-    // const moveType = function () {
-    //   if (
-    //     boardState.phase == "placement" &&
-    //     !board[boardState.selectedPiece]
-    //   ) {
-    //     return "placement";
-    //   } else {
-    //     return move;
-    //   }
-    // };
+    // console.log(phase, !board[pieceKey], currentPlayer);
 
     if (moveType) {
       const message = {
         moveType: moveType,
-        currentPlayer: boardState.currentPlayer,
+        currentPlayer: currentPlayer,
         pieceType: board[boardState.activePiece], // it's null in placement phase
         fromKey: fromKey,
         toKey: toKey,
@@ -71,21 +42,21 @@ const Board = ({ board, onMoveSend }) => {
         selectedPiece: null,
         activePiece: null,
       }));
-      // if yes get the move data and send to a callback to parent
-      onMoveSend(message);
+      onMoveSend(message); // send move to server
     }
   };
 
+  // handle hover (currently unused, reserved for future use)
   const handlePieceHover = (row, col, isEntering) => {
-    // console.log(`${isEntering ? "Entering" : "Leaving"} Piece at (${row}, ${col})`);
-    // if the player and Piece type are same then hghlight the border with green
+    console
+      .log
+      // `${isEntering ? "Entering" : "Leaving"} Piece at (${row}, ${col})`
+      ();
   };
 
-  // Generate grid lines (horizontal and vertical)
+  // draw grid lines
   const renderGridLines = () => {
     const lines = [];
-
-    // Horizontal lines
     for (let row = 0; row <= boardSize; row++) {
       const y = padding + row * cellSize;
       lines.push(
@@ -100,8 +71,6 @@ const Board = ({ board, onMoveSend }) => {
         />
       );
     }
-
-    // Vertical lines
     for (let col = 0; col <= boardSize; col++) {
       const x = padding + col * cellSize;
       lines.push(
@@ -115,11 +84,10 @@ const Board = ({ board, onMoveSend }) => {
         />
       );
     }
-
     return lines;
   };
 
-  // Generate diagonal lines
+  // draw diagonals
   const renderDiagonalLines = () => {
     const lines = [];
     const startX = padding;
@@ -129,7 +97,7 @@ const Board = ({ board, onMoveSend }) => {
     const centerX = padding + 2 * cellSize;
     const centerY = padding + 2 * cellSize;
 
-    // Main diagonals (full board)
+    // main diagonals
     lines.push(
       <line
         key="main-diag-1"
@@ -140,7 +108,6 @@ const Board = ({ board, onMoveSend }) => {
         className="stroke-gray-500 stroke-[1.5]"
       />
     );
-
     lines.push(
       <line
         key="main-diag-2"
@@ -152,16 +119,15 @@ const Board = ({ board, onMoveSend }) => {
       />
     );
 
-    // Quadrant diagonals
+    // quadrant diagonals
     const quadrants = [
-      { x1: startX, y1: startY, x2: centerX, y2: centerY }, // Top-left
-      { x1: centerX, y1: startY, x2: endX, y2: centerY }, // Top-right
-      { x1: startX, y1: centerY, x2: centerX, y2: endY }, // Bottom-left
-      { x1: centerX, y1: centerY, x2: endX, y2: endY }, // Bottom-right
+      { x1: startX, y1: startY, x2: centerX, y2: centerY },
+      { x1: centerX, y1: startY, x2: endX, y2: centerY },
+      { x1: startX, y1: centerY, x2: centerX, y2: endY },
+      { x1: centerX, y1: centerY, x2: endX, y2: endY },
     ];
 
     quadrants.forEach((quad, index) => {
-      // Diagonal from top-left to bottom-right of quadrant
       lines.push(
         <line
           key={`quad-diag-1-${index}`}
@@ -172,8 +138,6 @@ const Board = ({ board, onMoveSend }) => {
           className="stroke-gray-500 stroke-[1.5]"
         />
       );
-
-      // Diagonal from top-right to bottom-left of quadrant
       lines.push(
         <line
           key={`quad-diag-2-${index}`}
@@ -189,7 +153,7 @@ const Board = ({ board, onMoveSend }) => {
     return lines;
   };
 
-  // Generate intersection points
+  // render all the pieces on board
   const renderPieces = () => {
     const pieces = [];
     for (let row = 0; row <= boardSize; row++) {
@@ -198,6 +162,7 @@ const Board = ({ board, onMoveSend }) => {
         const y = padding + row * cellSize;
         const pieceKey = `${row}-${col}`;
         const pieceType = board[pieceKey] || null;
+
         pieces.push(
           <Piece
             key={pieceKey}
@@ -208,39 +173,37 @@ const Board = ({ board, onMoveSend }) => {
             radius={pieceRadius}
             pieceType={pieceType}
             isSelected={boardState.selectedPiece === pieceKey}
-            // isHighlighted={boardState.highlightedPieces.includes(pieceKey)}
             onClick={handlePieceClick}
             onHover={handlePieceHover}
           />
         );
       }
     }
-
     return pieces;
   };
 
+  // handle selection logic (clicking same piece twice deselects, etc.)
   const handleSelection = (row, col, pieceType) => {
     const pieceKey = `${row}-${col}`;
 
     const isValidSelection = (pieceKey, pieceType) => {
-      // for goat
-      if (boardState.currentPlayer === "goat") {
-        if (boardState.phase === "placement" && pieceType === null) {
+      // goat logic
+      if (currentPlayer === "goat") {
+        if (phase === "placement" && pieceType === null) {
           return true;
-        } else if (boardState.phase === "displacement" && pieceType == "goat") {
+        } else if (phase === "displacement" && pieceType == "goat") {
           setboardState((prev) => ({ ...prev, activePiece: pieceKey }));
           return true;
         } else if (
-          boardState.phase == "displacement" &&
+          phase == "displacement" &&
           board[boardState.activePiece] === "goat" &&
           !pieceType
         ) {
           return true;
         }
       }
-
-      // for tiger
-      if (boardState.currentPlayer === "tiger") {
+      // tiger logic
+      if (currentPlayer === "tiger") {
         if (pieceType === "tiger") {
           setboardState((prev) => ({ ...prev, activePiece: pieceKey }));
           return true;
@@ -248,18 +211,15 @@ const Board = ({ board, onMoveSend }) => {
           return true;
         }
       }
-
       return false;
     };
 
-    // select/unselect
     if (isValidSelection(pieceKey, pieceType)) {
       if (boardState.selectedPiece === pieceKey) {
         setboardState((prev) => ({
           ...prev,
           selectedPiece: null,
           activePiece: null,
-          // highlightedPieces: [],
         }));
         console.log(
           `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
@@ -268,7 +228,6 @@ const Board = ({ board, onMoveSend }) => {
         setboardState((prev) => ({
           ...prev,
           selectedPiece: pieceKey,
-          // highlightedPieces: [...prev.highlightedPieces, pieceKey],
         }));
         console.log(
           `selected Piece at (${row}, ${col}) with piece: ${pieceType}`
@@ -279,22 +238,13 @@ const Board = ({ board, onMoveSend }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-5">
-      {/* <h1 className="text-3xl font-bold text-gray-800 mb-8">Bagh Chal</h1> */}
-
       <div className="bg-white border-2 border-gray-600 rounded-lg p-5 shadow-lg">
         <svg width={svgSize} height={svgSize} className="bg-white">
           <g>{renderGridLines()}</g>
-
           <g>{renderDiagonalLines()}</g>
-
           <g>{renderPieces()}</g>
         </svg>
       </div>
-
-      {/* <div className="mt-4 text-center text-gray-600">
-        <p className="text-sm">Traditional Nepali Board Game</p>
-        <p className="text-xs">25 Points • 4 Tigers vs 20 Goats</p>
-      </div> */}
     </div>
   );
 };
