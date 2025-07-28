@@ -1,20 +1,29 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import AuthModal from "./AuthModal";
 
 function Layout() {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
   return (
-    <div className="flex h-screen w-screen p-5 ">
-      <SideBar />
-      <div className="flex h-full w-full">
-        <Outlet />
+    <>
+      <div className="flex h-screen w-screen p-5 ">
+        <SideBar setAuthModalOpen={setAuthModalOpen} />
+        <div className="flex h-full w-full">
+          <Outlet />
+        </div>
       </div>
-    </div>
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
+    </>
   );
 }
 
 export default Layout;
 
-function SideBar() {
+function SideBar({ setAuthModalOpen }) {
   const [user, setUser] = useState("USER1");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
@@ -37,7 +46,7 @@ function SideBar() {
         </div>
         <div className="text-gray-800 mb-5 font-medium">{user}</div>
         <button
-          onClick={handleLoginToggle}
+          onClick={() => setAuthModalOpen(true)}
           className="bg-gray-800 text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors"
         >
           {isLoggedIn ? "logout" : "login"}

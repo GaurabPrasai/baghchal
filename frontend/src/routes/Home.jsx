@@ -7,7 +7,6 @@ import AuthModal from "../components/AuthModal";
 const Home = () => {
   const [gameModalOpen, setGameModalOpen] = useState(false);
   const [mode, setMode] = useState("");
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   return (
     <>
       <div className="font-sans text-gray-800 bg-gray-100">
@@ -176,7 +175,6 @@ const Home = () => {
         isOpen={gameModalOpen}
         onClose={() => setGameModalOpen(false)}
       />
-      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen()} />
     </>
   );
 };
