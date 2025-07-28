@@ -38,7 +38,7 @@ function SideBar() {
         <div className="text-gray-800 mb-5 font-medium">{user}</div>
         <button
           onClick={handleLoginToggle}
-          className="bg-gray-600 text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors"
+          className="bg-gray-800 text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors"
         >
           {isLoggedIn ? "logout" : "login"}
         </button>
