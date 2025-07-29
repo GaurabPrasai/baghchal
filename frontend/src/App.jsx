@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Game from "./components/Game";
 import Layout from "./components/Layout";
@@ -6,19 +6,35 @@ import Layout from "./components/Layout";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import UserProfile from "./routes/UserProfile";
 import Home from "./routes/Home";
+import { AuthContext } from "./context/AuthContext";
+
+const initialAuth = JSON.parse(localStorage.getItem("auth")) || {
+  isAuthenticated: false,
+};
 
 function App() {
-  // return <Game />;
+  const [auth, setAuth] = useState(initialAuth);
+
+  useEffect(() => {
+    if (auth.user) {
+      localStorage.setItem("auth", JSON.stringify(auth));
+    } else {
+      localStorage.removeItem("auth");
+    }
+  }, [auth]);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="user" element={<UserProfile />} />
-          <Route path="game" element={<Game />} />
-        </Route>
-      </Routes>
-    </Router>
+    <AuthContext value={{ auth, setAuth }}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="user" element={<UserProfile />} />
+            <Route path="game" element={<Game />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthContext>
   );
 }
 

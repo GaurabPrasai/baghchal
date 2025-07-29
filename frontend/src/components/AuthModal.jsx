@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const AuthModal = ({ isOpen, onClose }) => {
+  const { auth, setAuth } = useContext(AuthContext);
   const [mode, setMode] = useState("login");
   const [formData, setFormData] = useState({
     username: "",
@@ -54,8 +56,9 @@ const AuthModal = ({ isOpen, onClose }) => {
           password: formData.password,
         });
         setMessage("Login successful!");
-        console.log(response.data.user_data);
-        // save token, navigate, etc.
+        const userData = response.data.user_data;
+        setAuth({ user: userData, isAuthenticated: true });
+        console.log("authenticated");
         onClose();
       }
     } catch (error) {
