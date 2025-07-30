@@ -97,15 +97,25 @@ class GameConsumer(WebsocketConsumer):
                     if not v:
                         initial_state['player'][k]= self.username
                         break
+                for k , v in initial_state["player"].items():
+                    if not v:
+                        break
+                else:
+                    if initial_state["status"] == 'waiting':
+                        initial_state["status"] ='ongoing'
             print("______________________________________________________")
             print(initial_state)
             print("______________________________________________________")
-            self.send(text_data=json.dumps({
-                "message": {
-                    "type": "init",
-                    "game_state": initial_state,
-                }
-            }))
+            # self.send(text_data=json.dumps({
+            #     "message": {
+            #         "type": "init",
+            #         "game_state": initial_state,
+            #     }
+            # ))
+            async_to_sync(self.channel_layer.group_send)(self.room_group_name, {
+                "type": "send_game_state",
+                'game_state': initial_state,
+            })
             print(f"Sent initial game state to player")
         except Exception as e:
             print(f"Error sending initial state: {e}")
