@@ -1,28 +1,13 @@
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect } from "react";
 import { useWebSocket } from "../context/WebSocketContext";
 
 function GameModal({ mode, isOpen, onClose }) {
   if (!isOpen) return null;
 
   const { connect } = useWebSocket();
-  const { auth, setAuth } = useContext(AuthContext);
   const [gameId, setGameId] = useState("");
   const [joinId, setJoinId] = useState("");
-  const [playerRole, setPlayerRole] = useState("tiger");
-
-  const connectToGame = (gameId, mode, role) => {
-    const params = new URLSearchParams({
-      game_id: gameId,
-      mode: mode,
-      role: role,
-      user_id: auth.user?.id || "",
-    });
-
-    const wsUrl = `ws://localhost:8000/ws/game/?${params}`;
-    // console.log(wsUrl);
-    connect(wsUrl);
-  };
+  const [playerRole, setPlayerRole] = useState("");
 
   const generateGameId = () => {
     return crypto.randomUUID();
@@ -31,6 +16,7 @@ function GameModal({ mode, isOpen, onClose }) {
   useEffect(() => {
     if (mode === "create") {
       setGameId(generateGameId());
+      setPlayerRole("tiger"); // default value for create mode
     } else if (mode === "quick") {
       handleQuick();
     }
@@ -52,17 +38,17 @@ function GameModal({ mode, isOpen, onClose }) {
   };
 
   const handleCreate = () => {
-    connectToGame(gameId, "create", playerRole);
+    connect(gameId, "create", playerRole);
   };
 
   const handleJoin = () => {
     console.log("Joining game:", joinId);
-    connectToGame(joinId.trim(), "join", playerRole);
+    connect(joinId.trim(), "join", playerRole);
   };
 
   const handleQuick = () => {
     console.log("Searching for quick game");
-    connectToGame("", "quick", playerRole);
+    connect("", "quick", playerRole);
   };
 
   return (
@@ -95,7 +81,7 @@ function GameModal({ mode, isOpen, onClose }) {
               onChange={(e) => setPlayerRole(e.target.value)}
               className="w-full p-2 mb-4 bg-gray-800 text-white rounded"
             >
-              <option value="tiger">Tiger</option>
+              <option value={"tiger"}>Tiger</option>
               <option value="goat">Goat</option>
             </select>
             <button

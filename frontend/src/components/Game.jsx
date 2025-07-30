@@ -12,13 +12,8 @@ const Game = () => {
 
   useEffect(() => {
     if (gameId && !isConnected) {
-      const params = new URLSearchParams({
-        game_id: gameId,
-        mode: "rejoin",
-      });
-      const wsUrl = `ws://localhost:8000/ws/game/?${params}`;
-
-      connect(wsUrl);
+      // reconnect with the websocket
+      connect(gameId, "rejoin");
     }
     if (gameState) {
       if (gameState.status === "over") {
@@ -54,6 +49,7 @@ const Game = () => {
           currentPlayer={gameState.currentPlayer}
           phase={gameState.phase}
           onMoveSend={handleMoveSend}
+          player={gameState.player}
         />
         player 2
       </div>

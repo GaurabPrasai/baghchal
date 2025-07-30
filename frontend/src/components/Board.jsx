@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Piece from "./Piece";
 import ValidateMove from "./utilities/MoveValidation.js";
+import { AuthContext } from "../context/AuthContext.jsx";
 
-const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
+const Board = ({ board, currentPlayer, phase, onMoveSend, player }) => {
+  const { auth } = useContext(AuthContext);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
 
@@ -67,6 +69,10 @@ const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
 
   // handle piece clicks
   const handlePieceClick = (row, col, pieceType) => {
+    console.log(auth.user?.username);
+    console.log(player[currentPlayer]);
+    if (player[currentPlayer] != auth.user?.username) return;
+
     const pieceKey = `${row}-${col}`;
     handleSelection(row, col, pieceType);
 

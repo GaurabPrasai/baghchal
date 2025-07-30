@@ -14,7 +14,12 @@ def get_initial_game_state():
         "unusedGoat": 20,
         "deadGoatCount": 0,
         "status": "waiting",   # can be 'waiting', 'ongoing', 'over'
-        "winner": None
+        "winner": None ,# can be goat or tiger
+        'player': {
+            "goat":"",  # username 
+            "tiger":"", #username
+        },
+
     }
 
 def update_game_state(room_name, move):

@@ -14,9 +14,11 @@ class GameConsumer(WebsocketConsumer):
         
         self.game_id = query.get("game_id", [None])[0]
         self.mode = query.get("mode", [None])[0]
-        self.user_role = query.get("role", [None])[0]
+        self.play_as = query.get("play_as", [None])[0]
+        self.username = query.get("username", [None])[0]
+        print(self.username)
         
-        print(f"Connection attempt - Mode: {self.mode}, Game ID: {self.game_id}, Role: {self.user_role}")
+        print(f"Connection attempt - Mode: {self.mode}, Game ID: {self.game_id}, Play as: {self.play_as}")
         
         # Validate connection parameters
         if not self.mode:
@@ -88,10 +90,16 @@ class GameConsumer(WebsocketConsumer):
         try:
             initial_state = game_states[self.room_group_name]
             initial_state["game_id"] = self.room_group_name
-            print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+            if self.play_as:
+                initial_state['player'][self.play_as] = self.username
+            else:
+                for k, v in initial_state['player'].items():
+                    if not v:
+                        initial_state['player'][k]= self.username
+                        break
+            print("______________________________________________________")
             print(initial_state)
-            
-            
+            print("______________________________________________________")
             self.send(text_data=json.dumps({
                 "message": {
                     "type": "init",

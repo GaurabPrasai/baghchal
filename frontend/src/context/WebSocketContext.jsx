@@ -1,5 +1,6 @@
 import { createContext, useContext, useRef, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
 
 const initialGameState = {
   board: {
@@ -14,23 +15,35 @@ const initialGameState = {
   deadGoatCount: 0,
   status: "waiting",
   winner: null,
+  player: {
+    goat: "",
+    tiger: "",
+  },
 };
 
 export const WebSocketContext = createContext(null);
 export const useWebSocket = () => useContext(WebSocketContext);
 
 export const WebSocketProvider = ({ children }) => {
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
   const socketRef = useRef(null);
   const [gameState, setGameState] = useState(initialGameState);
   const [isConnected, setIsConnected] = useState(false);
 
-  const connect = (url) => {
+  const connect = (gameId = "", mode = "", playAs = "") => {
     if (socketRef.current) {
       socketRef.current.close();
     }
+    const params = new URLSearchParams({
+      game_id: gameId,
+      mode: mode,
+      play_as: playAs,
+      username: auth.user?.username || "",
+    });
+    const wsUrl = `ws://localhost:8000/ws/game/?${params}`;
 
-    socketRef.current = new WebSocket(url);
+    socketRef.current = new WebSocket(wsUrl);
 
     socketRef.current.onopen = () => {
       setIsConnected(true);
@@ -59,19 +72,6 @@ export const WebSocketProvider = ({ children }) => {
     };
   };
 
-  const reconnect = () => {
-    console.log("trying to reconnect");
-    const { gameId } = useParams();
-
-    const newGameId = gameId.replace("game_", "");
-    const params = new URLSearchParams({
-      game_id: newGameId,
-    });
-
-    const wsUrl = `ws://localhost:8000/ws/game/?${params}`;
-    connect(wsUrl);
-  };
-
   const send = (message) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(message);
@@ -96,7 +96,6 @@ export const WebSocketProvider = ({ children }) => {
         disconnect,
         gameState,
         isConnected,
-        reconnect,
       }}
     >
       {children}
