@@ -38,7 +38,7 @@ def signup(request):
     user.save()
     # handle avatar upload here 
     
-    serializer = UserSerializer(user)
+    serializer = UserSerializer(user, request)
     print("successfully signup")
     return Response({"message": "signup successful"}, status=201)
     # return Response({'user_data': serializer.data}, status=201)

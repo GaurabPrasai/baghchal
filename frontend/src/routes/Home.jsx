@@ -71,7 +71,7 @@ const Home = () => {
                   </button>
 
                   <button
-                    className="w-full bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl 
+                    className="w-full bg-gray-800 text-white rounded-xl 
                              py-4 px-8 text-lg font-semibold hover:from-gray-800 hover:to-gray-950 
                              hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 
                              flex items-center justify-center space-x-3"

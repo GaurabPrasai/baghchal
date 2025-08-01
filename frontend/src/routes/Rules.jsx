@@ -2,7 +2,7 @@ import board from "../assets/board.png";
 
 const Rules = () => {
   return (
-    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen overflow-x-hidden w-full">
+    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen overflow-x-hidden">
       {/* Header */}
       <section className="bg-white border-b border-gray-200 py-12">
         <div className="container mx-auto px-4 text-center max-w-6xl">
