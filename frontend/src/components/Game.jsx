@@ -42,42 +42,52 @@ const Game = () => {
     );
   }
 
-  // Replace the main return statement in Game component with this:
   return (
-    <div className="flex h-full w-full flex-row justify-evenly">
-      <div className="flex flex-col justify-center overflow-hidden px-10 aspect-square">
-        <PlayerCard
-          isUserCard={false}
-          username={auth.user.username}
-          goatPlayer={gameState.player["goat"]}
-          tigerPlayer={gameState.player["tiger"]}
-          currentPlayer={gameState.currentPlayer}
-          gameState={gameState}
-        />
-        <Board
-          board={gameState.board}
-          currentPlayer={gameState.currentPlayer}
-          phase={gameState.phase}
-          onMoveSend={handleMoveSend}
-          player={gameState.player}
-          gameState={gameState}
-        />
-        <PlayerCard
-          isUserCard={true}
-          username={auth.user.username}
-          goatPlayer={gameState.player["goat"]}
-          tigerPlayer={gameState.player["tiger"]}
-          currentPlayer={gameState.currentPlayer}
-        />
+    <div className="flex flex-col lg:flex-row h-full w-full">
+      {/* Game Board Area - Takes priority for space */}
+      <div className="flex flex-col justify-center overflow-hidden px-4 lg:px-10 flex-1 min-h-0 lg:h-full">
+        <div className="flex-shrink-0">
+          <PlayerCard
+            isUserCard={false}
+            username={auth.user.username}
+            goatPlayer={gameState.player["goat"]}
+            tigerPlayer={gameState.player["tiger"]}
+            currentPlayer={gameState.currentPlayer}
+            gameState={gameState}
+          />
+        </div>
+        <div className="flex-1 flex items-center justify-center min-h-0">
+          <Board
+            board={gameState.board}
+            currentPlayer={gameState.currentPlayer}
+            phase={gameState.phase}
+            onMoveSend={handleMoveSend}
+            player={gameState.player}
+            gameState={gameState}
+          />
+        </div>
+        <div className="flex-shrink-0">
+          <PlayerCard
+            isUserCard={true}
+            username={auth.user.username}
+            goatPlayer={gameState.player["goat"]}
+            tigerPlayer={gameState.player["tiger"]}
+            currentPlayer={gameState.currentPlayer}
+          />
+        </div>
       </div>
-      <GameStatus gameState={gameState} />
+
+      {/* Game Status - Takes remaining space */}
+      <div className="flex-shrink-0 lg:w-80">
+        <GameStatus gameState={gameState} />
+      </div>
+
       <WinnerModal
         winner={winner}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       />
       <WaitingModal isOpen={gameState?.status === "waiting"} />
-      {/* <WaitingModal isOpen={false} /> */}
     </div>
   );
 };
@@ -86,9 +96,9 @@ export default Game;
 
 const GameStatus = ({ gameState, moveHistory }) => {
   return (
-    <div className="bg-white border-l border-gray-300 p-4 flex flex-col h-full w-80">
+    <div className="bg-white border-t lg:border-t-0 lg:border-l border-gray-300 p-4 flex flex-col w-full lg:w-80 h-64 lg:h-full overflow-y-auto">
       {/* Piece Counts */}
-      <div className="mb-6">
+      <div className="mb-4 lg:mb-6 flex-shrink-0">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Game Status
         </h3>
@@ -115,11 +125,11 @@ const GameStatus = ({ gameState, moveHistory }) => {
       </div>
 
       {/* Move History */}
-      <div className="flex-1">
+      <div className="flex-1 min-h-0">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Move History
         </h3>
-        <div className="bg-gray-50 rounded p-3 h-96 overflow-y-auto">
+        <div className="bg-gray-50 rounded p-3 h-full overflow-y-auto">
           {!moveHistory || moveHistory.length === 0 ? (
             <p className="text-gray-500 text-sm text-center mt-8">
               No moves yet
@@ -216,7 +226,7 @@ const PlayerCard = ({
 
   return (
     <div
-      className={`flex items-center justify-between p-2 rounded-lg my-1 ${
+      className={`flex items-center justify-between p-2 rounded-lg my-auto ${
         isCurrentTurn ? "shadow-lg bg-gray-300" : ""
       }`}
     >

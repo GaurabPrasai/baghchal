@@ -33,11 +33,7 @@ const Board = ({ board, currentPlayer, phase, onMoveSend, player }) => {
         const containerHeight = container.clientHeight;
 
         // Calculate the maximum size that fits in the container while maintaining square aspect ratio
-        const maxSize = Math.min(
-          containerWidth,
-          containerHeight,
-          Math.min(window.innerWidth, window.innerHeight)
-        );
+        const maxSize = Math.min(containerWidth, containerHeight);
 
         setDimensions({
           width: maxSize,
@@ -296,7 +292,7 @@ const Board = ({ board, currentPlayer, phase, onMoveSend, player }) => {
   return (
     <div
       ref={containerRef}
-      className="border-3 border-gray-400 rounded-lg shadow-lg aspect-square h-auto w-auto overflow-hidden"
+      className="border-3 border-gray-400 rounded-lg shadow-lg overflow-hidden flex items-center justify-center aspect-square w-full max-w-2xl mx-auto "
     >
       <svg
         width={svgSize}
