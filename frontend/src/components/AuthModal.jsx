@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
 const AuthModal = ({ isOpen, onClose }) => {
+  const baseHttpUrl = import.meta.env.VITE_BASE_HTTP_URL;
   const { auth, setAuth } = useContext(AuthContext);
   const [mode, setMode] = useState("login");
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         data.append("first_name", formData.displayName);
         if (formData.avatar) data.append("avatar", formData.avatar);
 
-        await axios.post("http://localhost:8000/signup/", data, {
+        await axios.post(`${baseHttpUrl}signup/`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
@@ -53,7 +54,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         setMode("login");
       } else {
         // #login
-        const response = await axios.post("http://localhost:8000/login/", {
+        const response = await axios.post(`${baseHttpUrl}login/`, {
           username: formData.username,
           password: formData.password,
         });

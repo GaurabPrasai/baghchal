@@ -23,6 +23,7 @@ const initialGameState = {
 
 export const WebSocketContext = createContext(null);
 export const useWebSocket = () => useContext(WebSocketContext);
+const baseSocketUrl = import.meta.env.VITE_BASE_WS_URL;
 
 export const WebSocketProvider = ({ children }) => {
   const { auth } = useContext(AuthContext);
@@ -41,7 +42,7 @@ export const WebSocketProvider = ({ children }) => {
       play_as: playAs,
       username: auth.user?.username || "",
     });
-    const wsUrl = `ws://localhost:8000/ws/game/?${params}`;
+    const wsUrl = `${baseSocketUrl}?${params}`;
 
     socketRef.current = new WebSocket(wsUrl);
 
