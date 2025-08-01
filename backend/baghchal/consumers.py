@@ -14,9 +14,11 @@ class GameConsumer(WebsocketConsumer):
         
         self.game_id = query.get("game_id", [None])[0]
         self.mode = query.get("mode", [None])[0]
-        self.user_role = query.get("role", [None])[0]
+        self.play_as = query.get("play_as", [None])[0]
+        self.username = query.get("username", [None])[0]
+        print(self.username)
         
-        print(f"Connection attempt - Mode: {self.mode}, Game ID: {self.game_id}, Role: {self.user_role}")
+        print(f"Connection attempt - Mode: {self.mode}, Game ID: {self.game_id}, Play as: {self.play_as}")
         
         # Validate connection parameters
         if not self.mode:
@@ -29,11 +31,10 @@ class GameConsumer(WebsocketConsumer):
             self.close(code=4000)
             return
         
-        # CRITICAL FIX: Accept the connection BEFORE doing anything else
         self.accept()
         print("WebSocket connection accepted")
         
-        # Handle different connection modescleara
+        # Handle different connection modesclearly
         try:
             self.handle_player_join()
         except Exception as e:
@@ -44,18 +45,15 @@ class GameConsumer(WebsocketConsumer):
         if self.mode == "create":
             # Set room group name for create mode
             self.room_group_name = f'game_{self.game_id}'
-            
             if self.room_group_name in game_states:
                 print("Error: Game already exists")
                 self.close(code=4001)
                 return
-                
             game_states[self.room_group_name] = get_initial_game_state()
             print(f"Created new game: {self.room_group_name}")
             
         elif self.mode == 'join':
             self.room_group_name = f'game_{self.game_id}'
-            
             joined_game = game_states.get(self.room_group_name)
             if not joined_game or joined_game.get('status') != "waiting":
                 print("Error: Game not available for joining")
@@ -74,6 +72,13 @@ class GameConsumer(WebsocketConsumer):
                 self.room_group_name = f'game_{new_game_id}'
                 game_states[self.room_group_name] = get_initial_game_state()
                 print(f"Created new quick game: {self.room_group_name}")
+
+        elif self.mode == 'rejoin':
+            # todo: check if the game already has this user as a player
+            self.room_group_name = f'game_{self.game_id}'
+            game_state = game_states.get(self.room_group_name)
+            if not game_state:
+                self.close(code=4000)
         
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -84,12 +89,33 @@ class GameConsumer(WebsocketConsumer):
         # Send initial game state to the connected player
         try:
             initial_state = game_states[self.room_group_name]
-            self.send(text_data=json.dumps({
-                "message": {
-                    "type": "init",
-                    "game_state": initial_state
-                }
-            }))
+            initial_state["game_id"] = self.room_group_name
+            if self.play_as:
+                initial_state['player'][self.play_as] = self.username
+            else:
+                for k, v in initial_state['player'].items():
+                    if not v:
+                        initial_state['player'][k]= self.username
+                        break
+                for k , v in initial_state["player"].items():
+                    if not v:
+                        break
+                else:
+                    if initial_state["status"] == 'waiting':
+                        initial_state["status"] ='ongoing'
+            print("______________________________________________________")
+            print(initial_state)
+            print("______________________________________________________")
+            # self.send(text_data=json.dumps({
+            #     "message": {
+            #         "type": "init",
+            #         "game_state": initial_state,
+            #     }
+            # ))
+            async_to_sync(self.channel_layer.group_send)(self.room_group_name, {
+                "type": "send_game_state",
+                'game_state': initial_state,
+            })
             print(f"Sent initial game state to player")
         except Exception as e:
             print(f"Error sending initial state: {e}")

@@ -11,6 +11,7 @@ import {
   WebSocketContext,
   WebSocketProvider,
 } from "./context/WebSocketContext";
+import Rules from "./routes/Rules";
 
 const initialAuth = JSON.parse(localStorage.getItem("auth")) || {
   isAuthenticated: false,
@@ -35,7 +36,8 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="user" element={<UserProfile />} />
-              <Route path="game" element={<Game />} />
+              <Route path="game/:gameId" element={<Game />} />
+              <Route path="rules" element={<Rules />} />
             </Route>
           </Routes>
         </WebSocketProvider>

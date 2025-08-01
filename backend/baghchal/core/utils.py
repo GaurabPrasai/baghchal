@@ -9,13 +9,17 @@ def get_initial_game_state():
             "4-0": "tiger",
             "4-4": "tiger"
         },
-        "status": "ongoing",   # can be 'ongoing', 'goat_won', 'tiger_won'
         "currentPlayer": "goat",
         "phase": "placement",  # can be displacement',  'placement
         "unusedGoat": 20,
         "deadGoatCount": 0,
         "status": "waiting",   # can be 'waiting', 'ongoing', 'over'
-        "winner": None
+        "winner": None ,# can be goat or tiger
+        'player': {
+            "goat":"",  # username 
+            "tiger":"", #username
+        },
+
     }
 
 def update_game_state(room_name, move):
@@ -53,7 +57,7 @@ def update_game_state(room_name, move):
     game_state["currentPlayer"] = "tiger" if current_player == "goat" else "goat"
 
     check_game_over(game_state)
-
+ 
     return game_state
 
 def get_mid_key(from_key, to_key):
@@ -111,79 +115,75 @@ def is_blocked(pos, board):
 def get_possible_tiger_moves(position):
     move_connections = {
         # Row 0
-        "0-0": ["0-1", "1-0"],
-        "0-1": ["0-0", "0-2"],
-        "0-2": ["0-1", "0-3", "1-2"],  # Only connects to center of row 1
-        "0-3": ["0-2", "0-4"],
-        "0-4": ["0-3", "1-4"],
+        "0-0": ["0-1", "1-0", "1-1"], # diagonal to 1-1
+        "0-1": ["0-0", "0-2", "1-1"], # vertical to 1-1
+        "0-2": ["0-1", "0-3", "1-1", "1-2", "1-3"], # diagonals to 1-1, 1-3 and vertical to 1-2
+        "0-3": ["0-2", "0-4", "1-3"], # vertical to 1-3
+        "0-4": ["0-3", "1-3", "1-4"], # diagonal to 1-3
 
         # Row 1
-        "1-0": ["0-0", "1-1", "2-0"],
-        "1-1": ["1-0", "1-2", "2-1"],
-        "1-2": ["0-2", "1-1", "1-3", "2-2"],  # Center point connects to 0-2 and 2-2
-        "1-3": ["1-2", "1-4", "2-3"],
-        "1-4": ["0-4", "1-3", "2-4"],
+        "1-0": ["0-0", "1-1", "2-0", "2-1"], # diagonal to 2-1
+        "1-1": ["0-0", "0-1", "0-2", "1-0", "1-2", "2-0", "2-1", "2-2"], # center connections
+        "1-2": ["0-2", "1-1", "1-3", "2-2"], # vertical connections
+        "1-3": ["0-2", "0-3", "0-4", "1-2", "1-4", "2-2", "2-3", "2-4"], # center connections
+        "1-4": ["0-4", "1-3", "2-3", "2-4"], # diagonal to 2-3
 
         # Row 2 (center row)
-        "2-0": ["1-0", "2-1", "3-0"],
-        "2-1": ["2-0", "2-2", "3-1"],
-        "2-2": ["1-2", "2-1", "2-3", "3-2"],  # Center point - key connection hub
-        "2-3": ["2-2", "2-4", "3-3"],
-        "2-4": ["1-4", "2-3", "3-4"],
+        "2-0": ["1-0", "1-1", "2-1", "3-0", "3-1"], # diagonal to 1-1, 3-1
+        "2-1": ["1-0", "1-1", "2-0", "2-2", "3-0", "3-1", "3-2"], # connections
+        "2-2": ["1-1", "1-2", "1-3", "2-1", "2-3", "3-1", "3-2", "3-3"], # center point - all adjacent
+        "2-3": ["1-3", "1-4", "2-2", "2-4", "3-2", "3-3", "3-4"], # connections
+        "2-4": ["1-3", "1-4", "2-3", "3-3", "3-4"], # diagonal to 1-3, 3-3
 
         # Row 3
-        "3-0": ["2-0", "3-1", "4-0"],
-        "3-1": ["3-0", "3-2", "4-1"],
-        "3-2": ["2-2", "3-1", "3-3", "4-2"],  # Center point connects to 2-2 and 4-2
-        "3-3": ["3-2", "3-4", "4-3"],
-        "3-4": ["2-4", "3-3", "4-4"],
+        "3-0": ["2-0", "2-1", "3-1", "4-0", "4-1"], # diagonal to 2-1, 4-1
+        "3-1": ["2-0", "2-1", "2-2", "3-0", "3-2", "4-0", "4-1", "4-2"], # center connections
+        "3-2": ["2-2", "3-1", "3-3", "4-2"], # vertical connections
+        "3-3": ["2-2", "2-3", "2-4", "3-2", "3-4", "4-2", "4-3", "4-4"], # center connections
+        "3-4": ["2-3", "2-4", "3-3", "4-3", "4-4"], # diagonal to 2-3, 4-3
 
         # Row 4
-        "4-0": ["3-0", "4-1"],
-        "4-1": ["4-0", "4-2"],
-        "4-2": ["3-2", "4-1", "4-3"],  # Only connects to center of row 3
-        "4-3": ["4-2", "4-4"],
-        "4-4": ["3-4", "4-3"],
+        "4-0": ["3-0", "3-1", "4-1"], # diagonal to 3-1
+        "4-1": ["3-0", "3-1", "4-0", "4-2"], # vertical to 3-1
+        "4-2": ["3-1", "3-2", "3-3", "4-1", "4-3"], # diagonals to 3-1, 3-3 and vertical to 3-2
+        "4-3": ["3-3", "3-4", "4-2", "4-4"], # vertical to 3-3
+        "4-4": ["3-3", "3-4", "4-3"], # diagonal to 3-3
     }
+
     return move_connections[position]
     
 
 def can_capture(pos, board):
     capture_connections = {
-        # Row 0
-        "0-0": ["0-2"],  # Can only capture 0-1 to land on 0-2
-        "0-1": [],       # No valid captures (can't jump over adjacent pieces)
-        "0-2": ["0-0", "0-4", "2-2"],  # Can capture 0-1→0-0, 0-3→0-4, 1-2→2-2
-        "0-3": [],       # No valid captures
-        "0-4": ["0-2"],  # Can capture 0-3 to land on 0-2
+        "0-0": ["0-2", "2-0", "2-2"],
+        "0-1": ["0-3", "2-1"],
+        "0-2": ["0-0", "0-4", "2-0", "2-2", "2-4"], # added 2-0, 2-4
+        "0-3": ["0-1", "2-3"],
+        "0-4": ["0-2", "2-2", "2-4"],
 
-        # Row 1
-        "1-0": ["3-0"],  # Can capture 2-0 to land on 3-0
-        "1-1": ["3-1"],  # Can capture 2-1 to land on 3-1
-        "1-2": ["1-0", "1-4", "3-2"],  # Horizontal captures and vertical through center
-        "1-3": ["3-3"],  # Can capture 2-3 to land on 3-3
-        "1-4": ["3-4"],  # Can capture 2-4 to land on 3-4
+        "1-0": ["1-2", "3-0"],
+        "1-1": ["1-3", "3-1", "3-3"], # added 3-3
+        "1-2": ["1-0", "1-4", "3-2"], # can capture horizontally across center
+        "1-3": ["1-1", "3-1", "3-3"], # added 3-1
+        "1-4": ["1-2", "3-4"],
 
-        # Row 2 (center row)
-        "2-0": ["4-0"],  # Can capture 3-0 to land on 4-0
-        "2-1": ["4-1"],  # Can capture 3-1 to land on 4-1
-        "2-2": ["0-2", "4-2", "2-0", "2-4"],  # Vertical captures and horizontal
-        "2-3": ["4-3"],  # Can capture 3-3 to land on 4-3
-        "2-4": ["4-4"],  # Can capture 3-4 to land on 4-4
+        "2-0": ["0-0", "0-2", "2-2", "4-0", "4-2"], # added 0-2, 4-2
+        "2-1": ["0-1", "2-3", "4-1"], # added 2-3 (horizontal capture)
+        "2-2": ["0-0", "0-2", "0-4", "2-0", "2-4", "4-0", "4-2", "4-4"],
+        "2-3": ["0-3", "2-1", "4-3"], # added 2-1 (horizontal capture)
+        "2-4": ["0-2", "0-4", "2-2", "4-2", "4-4"], # added 0-2, 4-2
 
-        # Row 3
-        "3-0": ["1-0"],  # Can capture 2-0 to land on 1-0
-        "3-1": ["1-1"],  # Can capture 2-1 to land on 1-1
-        "3-2": ["1-2", "3-0", "3-4"],  # Vertical and horizontal captures
-        "3-3": ["1-3"],  # Can capture 2-3 to land on 1-3
-        "3-4": ["1-4"],  # Can capture 2-4 to land on 1-4
+        "3-0": ["1-0", "3-2"],
+        "3-1": ["1-1", "1-3", "3-3"], # added 1-3
+        "3-2": ["1-2", "3-0", "3-4"], # can capture vertically across center
+        "3-3": ["1-1", "1-3", "3-1"], # added 1-1
+        "3-4": ["1-4", "3-2"],
 
-        # Row 4
-        "4-0": ["2-0"],  # Can capture 3-0 to land on 2-0
-        "4-1": ["2-1"],  # Can capture 3-1 to land on 2-1
-        "4-2": ["2-2", "4-0", "4-4"],  # Vertical capture and horizontal
-        "4-3": ["2-3"],  # Can capture 3-3 to land on 2-3
-        "4-4": ["2-4"],  # Can capture 3-4 to land on 2-4
+        "4-0": ["2-0", "2-2", "4-2"],
+        "4-1": ["2-1", "4-3"],
+        "4-2": ["2-0", "2-2", "2-4", "4-0", "4-4"], # added 2-0, 2-4
+        "4-3": ["2-3", "4-1"],
+        "4-4": ["2-2", "2-4", "4-2"],
     }
     capture_positions = capture_connections[pos]
     # for each capture position:

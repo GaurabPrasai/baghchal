@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Piece from "./Piece";
 import ValidateMove from "./utilities/MoveValidation.js";
+import { AuthContext } from "../context/AuthContext.jsx";
 
-const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
+const Board = ({ board, currentPlayer, phase, onMoveSend, player }) => {
+  const { auth } = useContext(AuthContext);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
 
@@ -31,11 +33,7 @@ const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
         const containerHeight = container.clientHeight;
 
         // Calculate the maximum size that fits in the container while maintaining square aspect ratio
-        const maxSize = Math.min(
-          containerWidth,
-          containerHeight,
-          Math.min(window.innerWidth, window.innerHeight)
-        );
+        const maxSize = Math.min(containerWidth, containerHeight);
 
         setDimensions({
           width: maxSize,
@@ -67,6 +65,10 @@ const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
 
   // handle piece clicks
   const handlePieceClick = (row, col, pieceType) => {
+    console.log(auth.user?.username);
+    console.log(player[currentPlayer]);
+    if (player[currentPlayer] != auth.user?.username) return;
+
     const pieceKey = `${row}-${col}`;
     handleSelection(row, col, pieceType);
 
@@ -96,9 +98,7 @@ const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
   };
 
   // handle hover
-  const handlePieceHover = (row, col, isEntering) => {
-    console.log();
-  };
+  const handlePieceHover = (row, col, isEntering) => {};
 
   // draw grid lines
   const renderGridLines = () => {
@@ -292,7 +292,7 @@ const Board = ({ board, currentPlayer, phase, onMoveSend }) => {
   return (
     <div
       ref={containerRef}
-      className="border-3 border-gray-400 rounded-lg shadow-lg aspect-square h-auto w-auto overflow-hidden"
+      className="border-3 border-gray-400 rounded-lg shadow-lg overflow-hidden flex items-center justify-center aspect-square w-full max-w-2xl mx-auto "
     >
       <svg
         width={svgSize}
