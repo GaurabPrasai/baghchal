@@ -4,12 +4,13 @@ from asgiref.sync import async_to_sync
 from urllib.parse import parse_qs
 from .utils import is_valid_uuid
 from .core.gameState import game_states
-from .core.utils import get_initial_game_state, update_game_state
+from .core.utils import get_initial_game_state, update_game_state, cleanup_game_states
 import random
 import uuid
 
 class GameConsumer(WebsocketConsumer):  
     def connect(self):
+        cleanup_game_states(game_states)
         query = parse_qs(self.scope['query_string'].decode())
         
         self.game_id = query.get("game_id", [None])[0]
@@ -42,6 +43,7 @@ class GameConsumer(WebsocketConsumer):
             self.close(code=4003)
     
     def handle_player_join(self):
+
         if self.mode == "create":
             # Set room group name for create mode
             self.room_group_name = f'game_{self.game_id}'
@@ -55,6 +57,7 @@ class GameConsumer(WebsocketConsumer):
         elif self.mode == 'join':
             self.room_group_name = f'game_{self.game_id}'
             game_to_join = game_states.get(self.room_group_name)
+
             if not game_to_join or game_to_join.get('status') != "waiting" or self.username in game_to_join.get('player').values():
                 print("Error: Game not available for joining")
                 self.close(code=4002)

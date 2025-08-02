@@ -194,4 +194,13 @@ def can_capture(pos, board):
             return True
     return False
 
-    
+
+def cleanup_game_states(game_states):
+    for k, v in list(game_states.items()):
+        # if game is over remove it
+        if v.get("status") == 'over':
+            game_states.pop(k)
+        # if the game doesn't have any player
+        if not any(v.get("player").values()):
+            game_states.pop(k)
+            

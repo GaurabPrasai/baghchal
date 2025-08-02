@@ -1,3 +1,4 @@
-# hold all games 
+# dictionary to hold all game_states 
+game_states = dict()
 
-game_states = {}
+
