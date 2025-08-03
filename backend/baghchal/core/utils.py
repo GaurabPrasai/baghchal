@@ -1,3 +1,4 @@
+import threading
 from .gameState import game_states
 
 def get_initial_game_state():
@@ -205,10 +206,15 @@ def can_capture(pos, board):
 
 def cleanup_game_states(game_states):
     for k, v in list(game_states.items()):
-        # if game is over remove it
-        if v.get("status") == 'over':
-            game_states.pop(k)
-        # if the game doesn't have any player
-        if not any(v.get("player").values()):
-            game_states.pop(k)
+        # if game is over remove or has no playr at all 
+        if v.get("status") == 'over' or not any(v.get("player").values()):
+            schedule_game_removal(game_states, k)
+
+def schedule_game_removal(game_states, game_id):
+    def remove_game():
+        game_states.pop(game_id)
+
+    # call function after 120 seconds 
+    timer = threading.Timer(120, remove_game)
+    timer.start()
             

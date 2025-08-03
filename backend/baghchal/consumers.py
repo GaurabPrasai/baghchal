@@ -87,8 +87,12 @@ class GameConsumer(WebsocketConsumer):
                 # Game doesn't exist
                 self.close(code=4000)
                 return 
-            elif self.username not in game_state["player"].values():
-                # User not part of the game
+            for k , v in game_state.get("player").items():
+                # if already has a role set the player for that role
+                if v == self.username:
+                    self.play_as = k
+                    break
+            else:                # if User not part of the game
                 self.close(code=4000)
                 return 
         
