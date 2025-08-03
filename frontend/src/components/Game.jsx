@@ -4,6 +4,8 @@ import Board from "./Board";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import useSound from "use-sound";
+import moveSound from "../assets/move_sound.mp3";
 
 const Game = () => {
   const { auth } = useContext(AuthContext);
@@ -11,6 +13,8 @@ const Game = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [winner, setWinner] = useState("");
+  const [playMoveSound] = useSound(moveSound);
+
   let { gameId } = useParams();
   gameId = gameId.replace("game_", "");
 
@@ -20,6 +24,10 @@ const Game = () => {
       connect(gameId, "rejoin");
     }
     if (gameState) {
+      // if a piece has been placed or moved to new position
+      if (gameState.newPosition) {
+        playMoveSound();
+      }
       if (gameState.status === "over") {
         setWinner(gameState.winner);
         setModalOpen(true);
