@@ -137,7 +137,7 @@ const GameStatus = ({ gameState, moveHistory }) => {
   };
 
   return (
-    <div className="h-64 lg:h-full flex flex-col p-3 lg:p-4 font-sans">
+    <div className="h-32 lg:h-full flex flex-col p-3 lg:p-4 font-sans overflow-y-auto">
       {/* Current Turn */}
       <div className="mb-4 lg:mb-6 flex-shrink-0">
         <h3 className="text-xs lg:text-sm font-semibold text-gray-800 uppercase tracking-wider mb-2">
