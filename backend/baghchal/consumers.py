@@ -10,6 +10,7 @@ import uuid
 
 class GameConsumer(WebsocketConsumer):  
     def connect(self):
+  
         cleanup_game_states(game_states)
         query = parse_qs(self.scope['query_string'].decode())
         
@@ -117,7 +118,7 @@ class GameConsumer(WebsocketConsumer):
                     # After assigning, check if all slots are now filled
                         if all(initial_state['player'].values()) and initial_state      ["status"] == 'waiting':
                             initial_state["status"] = 'ongoing'
-                            break
+                        break
 
 
             async_to_sync(self.channel_layer.group_send)(self.room_group_name, {
