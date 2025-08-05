@@ -1,13 +1,13 @@
 # Baghchal Online – CS50 Web Final Project  
-**Video demo:** [No Video Yet]()
+**Video demo:** [https://youtu.be/wQ3ESM5QZJc](https://youtu.be/wQ3ESM5QZJc)
 
 **Live at:** [https://baghchal-2srv.onrender.com/](https://baghchal-2srv.onrender.com/)
 
 ## Introduction
 
-For my final project, I decided to build an online, two-player version of **Baghchal**, a classic Nepali strategy game. I grew up playing this game on paper boards with pebbles, and always wanted to bring it to the web as a multiplayer game. . Most versions available online are either single-player or limited in functionality, so I thought: why not build a real-time, modern version from scratch?
+For my final project, I  built an online two-player version of baghchal, a classic Nepali strategy game. I grew up playing this game on  with pebbles, and always wanted to bring it to the web as a multiplayer game. . Most versions available online are either single-player or limited in functionality, so I thought of making a modern multiplayer version.
 
-The app allows users to create an account, upload an avatar(not available currently) , and then either join or create a game room. Once two players are connected, they can play as goats or tigers on a live board. The game updates in real-time using WebSockets, and the rules — including valid moves, turn logic, and capture rules — are enforced on the backend.
+The app allows users to create an account and then either join or create a game room. Once two players are connected, they can play as goats or tigers on a live board. The game updates in real-time using WebSockets, and the rules — including valid moves, turn logic, and capture rules — are enforced on the backend.
 
 ---
 
@@ -17,10 +17,9 @@ I believe this project stands out from the ones we built in the course in a few 
 
 Second, the game itself isn’t something simple like chat or a blog — it required me to **implement all the rules of Baghchal**, including how goats move, how tigers capture, turn switching, and checking win conditions. This logic lives in a custom Python module(as well as in client side)  I wrote and tested manually with dozens of scenarios.
 
-On the frontend, I used **React** and managed state using context providers. I also handled sync between WebSocket messages and the local board state — which wasn't always easy to debug. Plus, I made sure everything works well on both mobile and desktop.
+On the frontend, I used **Vite + React**. I also handled sync between WebSocket messages and the local board state — which wasn't always easy to debug. Plus, I made sure everything works well on both mobile and desktop.
 
-Overall, combining backend game logic, real-time sync, authentication, avatars, and a responsive UI made this project more challenging (and satisfying) than anything I’ve done so far.
-
+Overall, combining backend game logic, real-time sync, authentication, and a responsive UI made this project more challenging (and satisfying) than the earlier projects.
 ---
 
 ## File Overview
