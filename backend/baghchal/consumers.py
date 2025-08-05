@@ -18,7 +18,6 @@ class GameConsumer(WebsocketConsumer):
         self.mode = query.get("mode", [None])[0]
         self.play_as = query.get("play_as", [None])[0]
         self.username = query.get("username", [None])[0]
-        # print(self.username)
         
         print(f"Connection attempt - Mode: {self.mode}, Game ID: {self.game_id}, Play as: {self.play_as}")
         
@@ -36,7 +35,7 @@ class GameConsumer(WebsocketConsumer):
         self.accept()
         print("WebSocket connection accepted")
         
-        # Handle different connection modesclearly
+        # Handle different connection
         try:
             self.handle_player_join()
         except Exception as e:
@@ -189,6 +188,3 @@ class GameConsumer(WebsocketConsumer):
                 self.room_group_name, 
                 self.channel_name
             )
-            
-            # Optional: Clean up empty games or mark as abandoned
-            # You might want to implement game cleanup logic here

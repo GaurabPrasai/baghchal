@@ -1,7 +1,6 @@
 import { useState } from "react";
 import goat from "../assets/goat.png";
 import tiger from "../assets/tiger.png";
-// Piece Component - handles individual board positions
 const Piece = ({
   x,
   y,
@@ -63,7 +62,7 @@ const Piece = ({
   const renderPiece = () => {
     if (!pieceType) return null;
 
-    const imageSize = radius * 1.8; // Make image slightly larger than circle
+    const imageSize = radius * 1.8;
     const imageX = x - imageSize / 2;
     const imageY = y - imageSize / 2;
 

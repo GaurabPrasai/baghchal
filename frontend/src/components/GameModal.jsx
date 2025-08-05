@@ -137,21 +137,6 @@ function GameModal({ mode, isOpen, onClose }) {
               />
             </div>
 
-            {/* <div>
-              <label className="block mb-3 text-gray-700 font-medium">
-                Choose your role:
-              </label>
-              <select
-                value={playerRole}
-                onChange={(e) => setPlayerRole(e.target.value)}
-                className="w-full p-3 bg-white border border-gray-300 text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
-              >
-                <option value="">Select your role...</option>
-                <option value="tiger">🐅 Tiger (Hunter)</option>
-                <option value="goat">🐐 Goat (Defender)</option>
-              </select>
-            </div> */}
-
             <button
               onClick={handleJoin}
               // disabled={!joinId.trim() || !playerRole}
@@ -174,21 +159,6 @@ function GameModal({ mode, isOpen, onClose }) {
                 We'll match you with another player shortly
               </p>
             </div>
-            {/* 
-            <div>
-              <label className="block mb-3 text-gray-700 font-medium">
-                Preferred role:
-              </label>
-              <select
-                value={playerRole}
-                onChange={(e) => setPlayerRole(e.target.value)}
-                className="w-full p-3 bg-white border border-gray-300 text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
-              >
-                <option value="">No preference</option>
-                <option value="tiger">🐯 Tiger (Hunter)</option>
-                <option value="goat">🐐 Goat (Defender)</option>
-              </select>
-            </div> */}
           </div>
         )}
       </div>

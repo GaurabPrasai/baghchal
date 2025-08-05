@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, use, useContext } from "react";
 import { useWebSocket } from "../context/WebSocketContext";
-import Board from "./Board";
+import Board from "../components/Board";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -63,7 +63,6 @@ const Game = () => {
     <div className="h-full w-full flex flex-col lg:flex-row justify-center bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Game Board Area */}
       <div className="flex-1 flex flex-col min-h-0 pt-20 md:pt-0 mb-10 md:mb-0">
-        {/* <div className="flex-1 flex flex-col justify-center space-y-2 sm:space-y-4 min-h-0"> */}
         <div className="flex-shrink-0">
           <PlayerCard
             isUserCard={false}
@@ -155,16 +154,10 @@ const GameStatus = ({ gameState, moveHistory }) => {
           <div className="text-sm lg:text-lg font-bold text-gray-800">
             {getCurrentTurnDisplay()}
           </div>
-          {/* <div className="text-xs lg:text-sm text-gray-600 mt-1 font-light">
-            {getPhaseDisplay()}
-          </div> */}
         </div>
       </div>
 
       <div className="mb-4 lg:mb-6 flex-shrink-0 ">
-        {/* <h3 className="text-xs lg:text-sm font-semibold text-gray-800 uppercase tracking-wider mb-2 lg:mb-3">
-          Phase
-        </h3> */}
         <div className="flex justify-between items-center py-1.5 lg:py-2 px-2 lg:px-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
           <span className="text-gray-800 text-xs lg:text-sm font-medium">
             Phase

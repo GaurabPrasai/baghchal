@@ -6,7 +6,7 @@ from .serializers import UserSerializer
 
 @api_view(['GET'])
 def index(request):
-    return Response({"message": "hello world"})
+    return Response({"message": "api connected"})
 
 @api_view(['POST'])
 def signup(request):
@@ -36,12 +36,10 @@ def signup(request):
         print("unable to signup")
         return Response({'error': 'unable to signup'}, status=400)
     user.save()
-    # handle avatar upload here 
     
     serializer = UserSerializer(user, request)
     print("successfully signup")
     return Response({"message": "signup successful"}, status=201)
-    # return Response({'user_data': serializer.data}, status=201)
 
 
 

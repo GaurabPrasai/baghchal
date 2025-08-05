@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Game from "./components/Game";
-import Layout from "./components/Layout";
-// import home from
+import Game from "./routes/Game";
+import Layout from "./routes/Layout";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import UserProfile from "./routes/UserProfile";
 import Home from "./routes/Home";

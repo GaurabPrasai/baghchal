@@ -15,6 +15,4 @@ class User(AbstractUser):
     
     def display_name(self):
         return self.first_name
-    
-    # later on add display name as fname+lname as a property
 

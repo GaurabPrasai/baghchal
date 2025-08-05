@@ -34,6 +34,7 @@ export const WebSocketProvider = ({ children }) => {
   const [gameState, setGameState] = useState(initialGameState);
   const [isConnected, setIsConnected] = useState(false);
 
+  // connect to the server websocket
   const connect = (gameId = "", mode = "", playAs = "") => {
     if (socketRef.current) {
       socketRef.current.close();
@@ -53,6 +54,7 @@ export const WebSocketProvider = ({ children }) => {
       console.log("websocket connected");
     };
 
+    // update and locate to game on new gameState
     socketRef.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const newGameState = data.message?.game_state;
