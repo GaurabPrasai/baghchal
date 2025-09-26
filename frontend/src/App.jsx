@@ -8,6 +8,7 @@ import Home from "./routes/Home";
 import { AuthContext } from "./context/AuthContext";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import Rules from "./routes/Rules";
+import AuthModal from "./components/AuthModal";
 
 const initialAuth = JSON.parse(localStorage.getItem("auth")) || {
   isAuthenticated: false,
@@ -15,12 +16,15 @@ const initialAuth = JSON.parse(localStorage.getItem("auth")) || {
 
 function App() {
   const [auth, setAuth] = useState(initialAuth);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   useEffect(() => {
-    if (auth.user) {
+    // if logged in or guestid saved , save it to browser
+    if (auth.user || auth?.guestId) {
       localStorage.setItem("auth", JSON.stringify(auth));
     } else {
-      localStorage.removeItem("auth");
+      //else for  prompt login with option to continue as guest
+      setAuthModalOpen(true);
     }
   }, [auth]);
 
@@ -29,7 +33,10 @@ function App() {
       <Router>
         <WebSocketProvider>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route
+              path="/"
+              element={<Layout setAuthModalOpen={setAuthModalOpen} />}
+            >
               <Route index element={<Home />} />
               <Route path="user" element={<UserProfile />} />
               <Route path="game/:gameId" element={<Game />} />
@@ -38,6 +45,11 @@ function App() {
           </Routes>
         </WebSocketProvider>
       </Router>
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
+      ;
     </AuthContext>
   );
 }

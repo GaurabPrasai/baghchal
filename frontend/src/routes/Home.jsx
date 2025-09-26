@@ -1,22 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import board from "../assets/board.png";
 import GameModal from "../components/GameModal";
-import AuthModal from "../components/AuthModal";
 import { AuthContext } from "../context/AuthContext";
-import { useOutletContext } from "react-router-dom";
 
 const Home = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const [gameModalOpen, setGameModalOpen] = useState(false);
   const [gameMode, setGameMode] = useState("");
-  const setAuthModalOpen = useOutletContext();
-
   const handleClick = (mode) => {
-    if (!auth.isAuthenticated) {
-      setAuthModalOpen(true);
-      return;
-    }
     setGameModalOpen(true);
     setGameMode(mode);
   };

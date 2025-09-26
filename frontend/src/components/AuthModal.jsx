@@ -30,6 +30,14 @@ const AuthModal = ({ isOpen, onClose }) => {
       [name]: files ? files[0] : value,
     }));
   };
+  const generateGuestId = () => {
+    return crypto.randomUUID();
+  };
+
+  const handleContinueAsGuest = () => {
+    onClose();
+    setAuth({ isAuthenticated: false, guestId: generateGuestId() });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +83,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white text-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-auto border border-gray-200">
+      <div className="bg-white text-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-auto border border-gray-200 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3">
@@ -201,6 +209,19 @@ const AuthModal = ({ isOpen, onClose }) => {
               <span>{mode === "login" ? "Log In" : "Create Account"}</span>
             )}
           </button>
+
+          {/* if  logged in or has guestId, don't show this button  */}
+          {auth.guestId || auth.user ? (
+            ""
+          ) : (
+            <button
+              type="button"
+              onClick={handleContinueAsGuest}
+              className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors font-medium border border-gray-300"
+            >
+              Continue as Guest
+            </button>
+          )}
 
           {/* Message Display */}
           {message && (

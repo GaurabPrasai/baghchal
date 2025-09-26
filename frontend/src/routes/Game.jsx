@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import moveSound from "../assets/move_sound.mp3";
 import PlayerCard from "../components/PlayerCard";
+import GameStatus from "../components/GameStatus";
 
 const Game = () => {
   const { auth } = useContext(AuthContext);
@@ -38,7 +39,7 @@ const Game = () => {
     }
   }, [gameState]);
 
-  if (!auth.user) {
+  if (!(auth.user || auth.guestId)) {
     navigate("/");
   }
 

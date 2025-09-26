@@ -1,12 +1,9 @@
 import { useContext, useState } from "react";
-import { Outlet } from "react-router-dom";
-import AuthModal from "../components/AuthModal";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-function Layout() {
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-
+function Layout({ setAuthModalOpen }) {
   return (
     <>
       <div className="flex h-screen w-screen bg-gray-50">
@@ -15,13 +12,9 @@ function Layout() {
           className="flex h-full w-full md:p-5 p-0 justify-center overflow-hidden 
         "
         >
-          <Outlet context={setAuthModalOpen} />
+          <Outlet />
         </div>
       </div>
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-      />
     </>
   );
 }

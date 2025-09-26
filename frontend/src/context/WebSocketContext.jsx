@@ -43,7 +43,8 @@ export const WebSocketProvider = ({ children }) => {
       game_id: gameId,
       mode: mode,
       play_as: playAs,
-      username: auth.user?.username || "",
+      //TODO: add guestID if username doesn't exist
+      username: auth.user?.username || auth.guestId,
     });
     const wsUrl = `${baseSocketUrl}?${params}`;
 

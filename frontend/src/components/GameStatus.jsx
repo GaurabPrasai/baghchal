@@ -119,3 +119,5 @@ const GameStatus = ({ gameState, moveHistory }) => {
     </div>
   );
 };
+
+export default GameStatus;
