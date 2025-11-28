@@ -26,28 +26,6 @@ const GameStatus = ({ gameState, moveHistory }) => {
 
   return (
     <div className="h-32 lg:h-full flex flex-col p-3 lg:p-4 font-sans overflow-y-auto">
-      {/* Current Turn */}
-      <div className="mb-4 lg:mb-6 flex-shrink-0">
-        <h3 className="text-xs lg:text-sm font-semibold text-gray-800 uppercase tracking-wider mb-2">
-          Current Turn
-        </h3>
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-2 lg:p-3 border border-gray-200 shadow-sm">
-          <div className="text-sm lg:text-lg font-bold text-gray-800">
-            {getCurrentTurnDisplay()}
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-4 lg:mb-6 flex-shrink-0 ">
-        <div className="flex justify-between items-center py-1.5 lg:py-2 px-2 lg:px-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
-          <span className="text-gray-800 text-xs lg:text-sm font-medium">
-            Phase
-          </span>
-          <span className="font-bold text-gray-800 text-xs lg:text-base">
-            {gameState?.phase || 0}
-          </span>
-        </div>
-      </div>
       {/* Game Statistics */}
       <div className="mb-4 lg:mb-6 flex-shrink-0 ">
         <h3 className="text-xs lg:text-sm font-semibold text-gray-800 uppercase tracking-wider mb-2 lg:mb-3">
@@ -62,14 +40,7 @@ const GameStatus = ({ gameState, moveHistory }) => {
               {gameState?.unusedGoat || 0}
             </span>
           </div>
-          <div className="flex justify-between items-center py-1.5 lg:py-2 px-2 lg:px-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
-            <span className="text-gray-800 text-xs lg:text-sm font-medium">
-              Goats on Board
-            </span>
-            <span className="font-bold text-gray-800 text-xs lg:text-base">
-              {getGoatsOnBoard()}
-            </span>
-          </div>
+
           <div className="flex justify-between items-center py-1.5 lg:py-2 px-2 lg:px-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
             <span className="text-gray-800 text-xs lg:text-sm font-medium">
               Goats Captured
