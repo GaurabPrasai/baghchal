@@ -118,16 +118,6 @@ const Home = () => {
                 </div>
               </div>
             </div>
-
-            {/* Subtle Call to Action */}
-            <div className="text-center mt-10">
-              <p className="text-gray-500 text-lg">
-                Ready to test your strategic mind?
-              </p>
-              <div className="mt-4 animate-bounce">
-                <span className="text-2xl">🎲</span>
-              </div>
-            </div>
           </div>
         </section>
       </div>
