@@ -42,7 +42,7 @@ function SideBar({ setAuthModalOpen }) {
   return (
     <>
       {/* Mobile Navigation Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-300 px-4 py-3 flex items-center justify-between">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-300 px-4 py-1 sm:py-2 flex items-center justify-between">
         {/* Hamburger Menu Button */}
         <button
           onClick={toggleMobileMenu}
@@ -78,7 +78,7 @@ function SideBar({ setAuthModalOpen }) {
             navigate("/");
             setIsMobileMenuOpen(false);
           }}
-          className="text-xl font-bold text-gray-800"
+          className="text-xl font-extrabold text-gray-800"
         >
           BaghChal
         </div>
