@@ -65,8 +65,9 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", 
+    "http://localhost:5173",
     "https://baghchal-2srv.onrender.com",
+    "https://baghchal-snowy.vercel.app/",
 ]
 
 CORS_ALLOW_HEADERS = [
