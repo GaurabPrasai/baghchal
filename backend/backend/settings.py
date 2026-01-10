@@ -28,8 +28,8 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'baghchal-1.onrender.com',
     'baghchal.fly.dev',
+    'baghchal-1.onrender.com',
 ]
 
 
