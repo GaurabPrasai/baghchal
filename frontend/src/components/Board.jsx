@@ -308,7 +308,7 @@ const Board = ({
   return (
     <div
       ref={containerRef}
-      className="h-full w-full aspect-square flex items-center justify-center p-4"
+      className="h-full w-full aspect-square flex items-center justify-center p-2 md:p-4"
     >
       <div
         className="relative"

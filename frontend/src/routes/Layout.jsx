@@ -11,7 +11,7 @@ function Layout({ setAuthModalOpen }) {
         {/* Mobile top padding to account for fixed navbar */}
         <div className="md:hidden h-16 shrink-0"></div>
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto md:p-5 p-0">
+        <div className="flex-1 overflow-y-auto md:pt-5">
           <Outlet />
         </div>
       </main>
@@ -96,7 +96,7 @@ function SideBar({ setAuthModalOpen }) {
       <div
         className={`
           h-screen bg-[#2f2d2a] border-r border-[#3a3835] z-50 flex flex-col shadow-2xl
-          md:relative md:w-72 md:translate-x-0 md:h-full
+          md:relative md:w-50 md:translate-x-0 md:h-full
           fixed w-72 top-0 left-0 bottom-0 transform transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
           md:block
@@ -123,7 +123,7 @@ function SideBar({ setAuthModalOpen }) {
         </button>
 
         {/* Top Section */}
-        <div className="flex-1 p-8 overflow-y-auto min-h-0">
+        <div className="flex-1 p-4 overflow-y-auto min-h-0">
           {/* Logo/Home Button */}
           <div className="text-center mb-10 mt-8 md:mt-0">
             <button
@@ -139,7 +139,7 @@ function SideBar({ setAuthModalOpen }) {
           </div>
 
           {/* User Profile Section */}
-          <div className="bg-[#262522] rounded-xl p-6 mb-8 border border-[#3a3835] shadow-lg">
+          <div className="bg-[#262522] rounded-xl p-4 mb-8 border border-[#3a3835] shadow-lg">
             <div className="text-center">
               <div className="w-20 h-20 bg-gradient-to-br from-[#f95e5e] to-[#d94545] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                 {auth.user?.username?.[0]?.toUpperCase() || "G"}

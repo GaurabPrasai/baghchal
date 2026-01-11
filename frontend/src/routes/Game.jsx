@@ -63,19 +63,19 @@ const Game = () => {
 
   return (
     <div className="h-full w-full flex flex-col lg:flex-row justify-center bg-[#262522]">
-      {/* Game Board Area */}
       <div className="flex-1 flex flex-col min-h-0 md:pt-0">
-        <div className="flex-shrink-0 px-2 py-2">
+        {/* Player Cards Row */}
+        <div className="px-2 py-2">
           <PlayerCard
-            isUserCard={false}
             username={auth.user?.username || auth.guestId}
             goatPlayer={gameState.player["goat"]}
             tigerPlayer={gameState.player["tiger"]}
-            currentPlayer={gameState.currentPlayer}
+            currentPlayer={gameState.player[gameState.currentPlayer]}
             gameState={gameState}
           />
         </div>
 
+        {/* Board */}
         <div className="flex-1 flex justify-center items-center min-h-0">
           <Board
             board={gameState.board}
@@ -88,21 +88,10 @@ const Game = () => {
             previousPosition={gameState.previousPosition}
           />
         </div>
-
-        <div className="flex-shrink-0 px-2 py-2">
-          <PlayerCard
-            isUserCard={true}
-            username={auth.user?.username || auth.guestId}
-            goatPlayer={gameState.player["goat"]}
-            tigerPlayer={gameState.player["tiger"]}
-            currentPlayer={gameState.currentPlayer}
-            gameState={gameState}
-          />
-        </div>
       </div>
 
       {/* Game Status Sidebar */}
-      <div className="w-full lg:w-80 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-[#3a3835] bg-[#2f2d2a] lg:h-full shadow-2xl">
+      <div className="w-full lg:w-60 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-[#3a3835] bg-[#2f2d2a] lg:h-full shadow-2xl">
         <GameStatus gameState={gameState} />
       </div>
 
