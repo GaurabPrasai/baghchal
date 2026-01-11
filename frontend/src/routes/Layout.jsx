@@ -9,7 +9,7 @@ function Layout({ setAuthModalOpen }) {
       <SideBar setAuthModalOpen={setAuthModalOpen} />
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile top padding to account for fixed navbar */}
-        <div className="md:hidden h-16 shrink-0"></div>
+        <div className="md:hidden h-12 shrink-0"></div>
         {/* Scrollable content area */}
         <div className="flex-1 overflow-y-auto md:pt-5">
           <Outlet />
@@ -42,7 +42,7 @@ function SideBar({ setAuthModalOpen }) {
   return (
     <>
       {/* Mobile Navigation Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#2f2d2a] border-b border-[#3a3835] px-4 py-3 flex items-center justify-between shadow-lg">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#2f2d2a] border-b border-[#3a3835] px-2 flex items-center justify-between shadow-lg">
         <button
           onClick={toggleMobileMenu}
           className="p-2 text-gray-300 hover:text-white focus:outline-none transition-colors"
@@ -96,8 +96,8 @@ function SideBar({ setAuthModalOpen }) {
       <div
         className={`
           h-screen bg-[#2f2d2a] border-r border-[#3a3835] z-50 flex flex-col shadow-2xl
-          md:relative md:w-50 md:translate-x-0 md:h-full
-          fixed w-72 top-0 left-0 bottom-0 transform transition-transform duration-300 ease-in-out
+          md:relative md:translate-x-0 md:h-full
+          fixed w-50 top-0 left-0 bottom-0 transform transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
           md:block
         `}
@@ -105,7 +105,7 @@ function SideBar({ setAuthModalOpen }) {
         {/* Mobile Close Button */}
         <button
           onClick={() => setIsMobileMenuOpen(false)}
-          className="md:hidden absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors z-10"
+          className="md:hidden absolute top-4 left-4 p-2 text-gray-400 hover:text-white transition-colors z-10"
         >
           <svg
             className="w-6 h-6"
@@ -181,7 +181,7 @@ function SideBar({ setAuthModalOpen }) {
           </nav>
 
           {/* Game Stats */}
-          <div className="mt-5 pt-5 border-t border-[#3a3835]">
+          {/* <div className="mt-5 pt-5 border-t border-[#3a3835]">
             <div className="text-gray-500 text-xs uppercase tracking-wide mb-4 font-semibold">
               Quick Stats
             </div>
@@ -199,7 +199,7 @@ function SideBar({ setAuthModalOpen }) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Section - Login/Logout Button */}
