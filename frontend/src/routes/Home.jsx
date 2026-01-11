@@ -1,134 +1,235 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
+// import { useContext } from "react";
+import { useWebSocket } from "../context/WebSocketContext";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import SecondaryButton from "../components/ui/SecondaryButton";
+import BaseModal from "../components/ui/BaseModal";
 import board from "../assets/board.png";
-import GameModal from "../components/GameModal";
-import { AuthContext } from "../context/AuthContext";
 
-const Home = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+export default function Home() {
   const [gameModalOpen, setGameModalOpen] = useState(false);
   const [gameMode, setGameMode] = useState("");
+
   const handleClick = (mode) => {
-    setGameModalOpen(true);
     setGameMode(mode);
+    setGameModalOpen(true);
   };
 
   return (
-    <>
-      <div className="font-sans text-gray-800 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen overflow-x-hidden w-full ">
-        {/* Enhanced Hero Section */}
-        <section className="min-h-screen flex items-center justify-center ">
-          <div className="container px-4  w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-              {/* Content Side */}
-              <div className="space-y-8 text-center lg:text-left">
-                <div className="space-y-4">
-                  <h1 className="text-5xl md:text-6xl font-bold text-gray-800 leading-tight mt-17 md:mt-0">
-                    Bagh Chal
-                  </h1>
-                  <div className="w-24 h-1 bg-gray-800 mx-auto lg:mx-0"></div>
-                  <p className="text-xl md:text-2xl text-gray-600 font-light">
-                    The Ancient Game of Strategy
-                  </p>
-                </div>
+    <div className="font-sans bg-[#262522] text-gray-200 min-h-screen overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-5 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center min-h-[90vh]">
+          {/* Content Side */}
+          <div className="space-y-8 text-center lg:text-left">
+            <div>
+              <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight leading-none">
+                Bagh Chal
+              </h1>
+              <div className="w-20 h-1 bg-[#f95e5e] mb-5 mx-auto lg:mx-0 rounded"></div>
+              <p className="text-2xl text-gray-400 font-light">
+                The Ancient Game of Strategy
+              </p>
+            </div>
 
-                <p className="hidden md:block text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Experience the legendary Nepali board game where cunning
-                  tigers hunt and strategic goats defend. A timeless battle of
-                  wits that has captivated minds across the Himalayas for
-                  centuries.
-                </p>
+            <p className="text-lg text-gray-400 leading-relaxed max-w-lg mx-auto lg:mx-0">
+              Experience the legendary Nepali board game where cunning tigers
+              hunt and strategic goats defend. A timeless battle of wits that
+              has captivated minds across the Himalayas for centuries.
+            </p>
 
-                {/* Enhanced Game Buttons */}
-                <div className="space-y-4 max-w-sm mx-auto lg:mx-0">
-                  <button
-                    className="w-full bg-gray-800 text-white rounded-xl py-4 px-8 text-lg font-semibold 
-                             hover:bg-gray-900 hover:shadow-lg transform hover:-translate-y-0.5 
-                             transition-all duration-300 flex items-center justify-center space-x-3"
-                    onClick={() => handleClick("create")}
-                  >
-                    <span>🎯</span>
-                    <span>Create Game</span>
-                  </button>
+            <div className="space-y-3 max-w-sm mx-auto lg:mx-0">
+              <PrimaryButton onClick={() => handleClick("create")}>
+                <span>🎯</span>
+                <span>Create Game</span>
+              </PrimaryButton>
 
-                  <button
-                    className="w-full bg-white text-gray-800 border-2 border-gray-800 rounded-xl py-4 px-8 
-                             text-lg font-semibold hover:bg-gray-800 hover:text-white hover:shadow-lg 
-                             transform hover:-translate-y-0.5 transition-all duration-300 
-                             flex items-center justify-center space-x-3"
-                    onClick={() => handleClick("join")}
-                  >
-                    <span>🤝</span>
-                    <span>Join Game</span>
-                  </button>
+              <SecondaryButton onClick={() => handleClick("join")}>
+                <span>🤝</span>
+                <span>Join Game</span>
+              </SecondaryButton>
 
-                  <button
-                    className="w-full bg-gray-800 text-white rounded-xl 
-                             py-4 px-8 text-lg font-semibold hover:from-gray-800 hover:to-gray-950 
-                             hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 
-                             flex items-center justify-center space-x-3"
-                    onClick={() => handleClick("quick")}
-                  >
-                    <span>⚡</span>
-                    <span>Quick Match</span>
-                  </button>
-                </div>
+              <PrimaryButton onClick={() => handleClick("quick")}>
+                <span>⚡</span>
+                <span>Quick Match</span>
+              </PrimaryButton>
+            </div>
 
-                {/* Game Stats */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-8 mt-10 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-gray-800">4</div>
-                    <div className="text-sm text-gray-600">Tigers</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-800">20</div>
-                    <div className="text-sm text-gray-600">Goats</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-800">∞</div>
-                    <div className="text-sm text-gray-600">Strategy</div>
-                  </div>
+            <div className="flex gap-10 pt-5 justify-center lg:justify-start">
+              <div>
+                <div className="text-3xl font-bold text-white">4</div>
+                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                  Tigers
                 </div>
               </div>
-
-              {/* Board Image Side */}
-              <div className="flex justify-center lg:justify-end overflow-hidden">
-                <div className="relative max-w-full">
-                  {/* Decorative elements */}
-                  <div className="absolute -top-4 -left-4 w-full h-full bg-gray-800 rounded-2xl transform rotate-3 hidden md:block"></div>
-                  <div className="absolute -top-2 -left-2 w-full h-full bg-gray-600 rounded-2xl transform rotate-1 hidden md:block"></div>
-
-                  {/* Main board container */}
-                  <div className="relative w-[280px] md:w-[350px] lg:w-[400px] bg-white p-6 md:p-8 rounded-2xl shadow-2xl mx-auto">
-                    <div className="relative">
-                      <img
-                        src={board}
-                        alt="Traditional Bagh Chal board"
-                        className="w-full h-full object-contain drop-shadow-lg"
-                      />
-
-                      {/* Floating labels */}
-                      <div className="absolute -top-3 -right-3 bg-gray-800 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                        Traditional
-                      </div>
-                      <div className="absolute -bottom-3 -left-3 bg-white border-2 border-gray-800 text-gray-800 text-xs px-3 py-1 rounded-full font-semibold">
-                        Strategic
-                      </div>
-                    </div>
-                  </div>
+              <div>
+                <div className="text-3xl font-bold text-white">20</div>
+                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                  Goats
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-white">∞</div>
+                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                  Strategy
                 </div>
               </div>
             </div>
           </div>
-        </section>
+
+          {/* Board Side */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="relative bg-[#2f2d2a] p-10 rounded-xl border border-[#3a3835] shadow-2xl">
+              <img
+                src={board}
+                alt="Bagh Chal Board"
+                className="w-full max-w-md rounded"
+              />
+              <div className="absolute -top-3 -right-3 bg-[#f95e5e] text-white text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
+                Traditional
+              </div>
+              <div className="absolute -bottom-3 -left-3 bg-[#2f2d2a] border-2 border-[#f95e5e] text-gray-200 text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
+                Strategic
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <GameModal
-        mode={gameMode}
+      <Modal
         isOpen={gameModalOpen}
         onClose={() => setGameModalOpen(false)}
+        mode={gameMode}
       />
-    </>
+    </div>
+  );
+}
+
+const Modal = ({ isOpen, onClose, mode }) => {
+  const { connect } = useWebSocket();
+  const [gameId, setGameId] = useState(() => crypto.randomUUID());
+  const [joinId, setJoinId] = useState("");
+  const [playerRole, setPlayerRole] = useState("tiger");
+
+  const generateGameId = () => {
+    return crypto.randomUUID();
+  };
+
+  useEffect(() => {
+    if (mode === "create") {
+      setGameId(generateGameId());
+      setPlayerRole("tiger"); // default value for create mode
+    } else if (mode === "quick") {
+      handleQuick();
+    }
+  }, [mode]);
+
+  const handleCreate = () => {
+    connect(gameId, "create", playerRole);
+  };
+
+  const handleJoin = () => {
+    console.log("Joining game:", joinId);
+    connect(joinId.trim(), "join", playerRole);
+  };
+
+  const handleQuick = () => {
+    console.log("Searching for quick game");
+    connect("", "quick", playerRole);
+  };
+
+  const handleCopy = async (e) => {
+    try {
+      await navigator.clipboard.writeText(gameId);
+      const button = e.target;
+      const originalText = button.textContent;
+      button.textContent = "Copied!";
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const titleConfig = {
+    create: "🎯Create Game",
+    join: "🤝Join Game",
+    quick: "⚡ Quick Match",
+  };
+
+  const title = titleConfig[mode];
+
+  return (
+    <BaseModal isOpen={isOpen} onClose={onClose} title={title}>
+      {/* Create Mode  */}
+      {mode === "create" && (
+        <div className="space-y-6">
+          <p className="text-gray-400 mb-5">
+            Share this Game ID with a friend:
+          </p>
+
+          <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#3a3835] flex justify-between items-center gap-3">
+            <span className="font-mono text-gray-200 break-all text-sm">
+              {gameId}
+            </span>
+            <button
+              onClick={handleCopy}
+              className="text-gray-200 border border-gray-600 hover:bg-gray-800 px-4 py-2 rounded-md transition-all text-sm font-semibold whitespace-nowrap"
+            >
+              Copy
+            </button>
+          </div>
+
+          <div>
+            <label className="block text-gray-300 mb-2 text-sm font-semibold">
+              Choose your role:
+            </label>
+            <select
+              value={playerRole}
+              onChange={(e) => setPlayerRole(e.target.value)}
+              className="w-full p-3 bg-[#1a1a1a] border border-[#3a3835] text-gray-200 rounded-lg focus:outline-none focus:border-[#f95e5e] transition-all"
+            >
+              <option value="tiger">🐅 Tiger (Hunter)</option>
+              <option value="goat">🐐 Goat (Defender)</option>
+            </select>
+          </div>
+
+          <PrimaryButton onClick={handleCreate}>Create Game Room</PrimaryButton>
+        </div>
+      )}
+
+      {/* Join mode  */}
+      {mode === "join" && (
+        <div className="space-y-6">
+          <p className="text-gray-400 mb-5">Enter the Game ID to join:</p>
+
+          <input
+            type="text"
+            value={joinId}
+            onChange={(e) => setJoinId(e.target.value)}
+            className="w-full p-4 rounded-lg bg-[#1a1a1a] border border-[#3a3835] text-gray-200 placeholder-gray-600 focus:outline-none focus:border-[#f95e5e] transition-all"
+            placeholder="Paste Game ID here..."
+          />
+
+          <PrimaryButton
+            onClick={handleJoin}
+            className={!joinId.trim() ? "opacity-50 cursor-not-allowed" : ""}
+          >
+            Join Game
+          </PrimaryButton>
+        </div>
+      )}
+
+      {/* Quick mode  */}
+      {mode === "quick" && (
+        <div className="text-center py-10">
+          <div className="w-12 h-12 border-4 border-[#3a3835] border-t-[#f95e5e] rounded-full animate-spin mx-auto mb-5"></div>
+          <p className="text-gray-400 mb-2">Looking for a quick match...</p>
+          <p className="text-gray-500 text-sm">
+            We'll match you with another player shortly
+          </p>
+        </div>
+      )}
+    </BaseModal>
   );
 };
-
-export default Home;
