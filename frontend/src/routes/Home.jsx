@@ -16,7 +16,7 @@ export default function Home() {
   };
 
   return (
-    <div className="font-sans bg-[#262522] text-gray-200 min-h-screen overflow-x-hidden">
+    <div className=" md:pl-10 font-sans bg-[#262522] text-gray-200 min-h-screen overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-5 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center min-h-[90vh]">
           {/* Content Side */}
