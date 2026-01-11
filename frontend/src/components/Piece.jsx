@@ -1,13 +1,14 @@
 import { useState } from "react";
 import goat from "../assets/goat.png";
 import tiger from "../assets/tiger.png";
+
 const Piece = ({
   x,
   y,
   row,
   col,
   radius,
-  pieceType = null, // 'tiger', 'goat', or null
+  pieceType = null,
   isSelected = false,
   isHighlighted = false,
   isPreviousPosition = false,
@@ -29,25 +30,26 @@ const Piece = ({
 
   // Circle styles based on state
   const getCircleStyle = () => {
-    let fill = "white";
-    let stroke = "#666";
+    let fill = "#e8dcc8"; // Matches board background
+    let stroke = "#8b7355"; // Dark brown
     let strokeWidth = 2;
 
     if (isSelected) {
-      stroke = "#3b82f6"; // blue
+      stroke = "#f95e5e"; // Brand red
+      strokeWidth = 4;
+    } else if (isNewPosition) {
+      stroke = "#4ade80"; // Bright green
+      strokeWidth = 4;
+    } else if (isPreviousPosition) {
+      stroke = "#fbbf24"; // Amber
       strokeWidth = 4;
     } else if (isHighlighted) {
-      stroke = "#10b981"; // green
+      stroke = "#10b981"; // Green
       strokeWidth = 3;
     } else if (isHovered) {
       strokeWidth = 3;
-      fill = "#c7c5c5";
-    } else if (isNewPosition) {
-      strokeWidth: 3;
-      stroke = "#1fcc1d";
-    } else if (isPreviousPosition) {
-      strokeWidth: 3;
-      stroke = "#f06c6c";
+      fill = "#f5e6d3"; // Lighter warm tone
+      stroke = "#a68a6a"; // Medium brown
     }
 
     return {
@@ -73,7 +75,10 @@ const Piece = ({
         width={imageSize}
         height={imageSize}
         href={pieceType === "tiger" ? tiger : goat}
-        style={{ pointerEvents: "none" }}
+        style={{
+          pointerEvents: "none",
+          filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
+        }}
       />
     );
   };
@@ -94,7 +99,6 @@ const Piece = ({
         data-row={row}
         data-col={col}
       />
-
       {/* Piece (tiger or goat) */}
       {renderPiece()}
     </g>
