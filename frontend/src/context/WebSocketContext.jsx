@@ -25,7 +25,7 @@ const initialGameState = {
 
 export const WebSocketContext = createContext(null);
 export const useWebSocket = () => useContext(WebSocketContext);
-const baseSocketUrl = import.meta.env.VITE_BASE_WS_URL;
+const baseSocketUrl = import.meta.env.BASE_WS_URL;
 
 export const WebSocketProvider = ({ children }) => {
   const { auth } = useContext(AuthContext);
