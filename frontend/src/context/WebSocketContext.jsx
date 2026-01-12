@@ -48,13 +48,11 @@ export const WebSocketProvider = ({ children }) => {
       username: auth.user?.username || auth.guestId,
     });
     const wsUrl = `${baseSocketUrl}?${params}`;
-    console.log("wsUrl: ", wsUrl);
 
     socketRef.current = new WebSocket(wsUrl);
 
     socketRef.current.onopen = () => {
       setIsConnected(true);
-      console.log("websocket connected");
     };
 
     // update and locate to game on new gameState
