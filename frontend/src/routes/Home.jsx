@@ -128,7 +128,7 @@ const Modal = ({ isOpen, onClose, mode }) => {
 
   const handleJoin = () => {
     console.log("Joining game:", joinId);
-    connect(joinId.trim(), "join", playerRole);
+    connect(joinId.trim(), "join");
   };
 
   const handleQuick = () => {
