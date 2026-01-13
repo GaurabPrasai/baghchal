@@ -204,19 +204,32 @@ def can_capture(pos, board):
 
 
 def cleanup_game_states(game_states):
-    """Removes completed or empty games from game_states"""
-    for k, v in list(game_states.items()):
-        # if game is over or has no playr at all, remove it
-        if v.get("status") == "over" or not any(v.get("player").values()):
-            schedule_game_removal(game_states, k)
+    """Removes completed or abandoned games from game_states"""
+    for game_id, game_state in list(game_states.items()):
+        # Remove finished games after delay
+        if game_state.get("status") == "over":
+            schedule_game_removal(game_states, game_id)
+
+        # Remove truly abandoned games (no players at all)
+        elif not any(game_state.get("player", {}).values()):
+            schedule_game_removal(game_states, game_id)
+
+        # one player left during ongoing game
+        elif game_state.get("status") == "ongoing":
+            players = game_state.get("player", {})
+            if not players.get("goat") or not players.get("tiger"):
+                # TODO: I don't know what feature to implement
+                pass
 
 
 def schedule_game_removal(game_states, game_id):
     def remove_game():
-        game_states.pop(game_id)
+        # TODO: store the game to the database
+        game_states.pop(game_id, None)
 
-    # call function after 120 seconds
-    timer = threading.Timer(120, remove_game)
+    # ? may be using different times for different condition is better
+    timer = threading.Timer(30, remove_game)
+    timer.daemon = True
     timer.start()
 
 
