@@ -22,14 +22,32 @@ const Game = () => {
   let { gameId } = useParams();
   gameId = gameId.replace("game_", "");
 
-  // Block navigation when game is in progress
+  const isGameInProgress = () => {
+    return gameState?.status !== "over" && gameState?.status !== "waiting";
+  };
+
+  // Block in-app navigation
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      gameState?.status !== "over" &&
-      gameState?.status !== "waiting" &&
-      currentLocation.pathname !== nextLocation.pathname
+      isGameInProgress() && currentLocation.pathname !== nextLocation.pathname
   );
 
+  // Block page close, refresh, or external navigation
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isGameInProgress()) {
+        e.preventDefault();
+        e.returnValue = "Game is in i. Are you sure you want to leave?";
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    // cleanup
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [gameState]);
+
+  // Handle in-app navigation blocking
   useEffect(() => {
     if (blocker.state === "blocked") {
       setShowLeaveConfirmation(true);
@@ -39,11 +57,9 @@ const Game = () => {
 
   useEffect(() => {
     if (gameId && !isConnected) {
-      // reconnect with the websocket
       connect(gameId, "rejoin");
     }
     if (gameState) {
-      // if a piece has been placed or moved to new position
       if (gameState.newPosition) {
         playMoveSound();
       }
@@ -51,8 +67,6 @@ const Game = () => {
         setWinner(gameState.winner);
         setModalOpen(true);
       }
-    } else {
-      console.log("no game state");
     }
   }, [gameState, gameId, isConnected, connect, playMoveSound]);
 
