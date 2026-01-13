@@ -30,7 +30,7 @@ function SideBar({ setAuthModalOpen }) {
     if (!auth.user) {
       setAuthModalOpen(true);
     } else {
-      setAuth({ isAuthenticated: false });
+      setAuth({ isLoggedIn: false });
     }
     setIsMobileMenuOpen(false);
   };
@@ -150,7 +150,7 @@ function SideBar({ setAuthModalOpen }) {
               </div>
 
               <div className="text-gray-500 text-sm">
-                {auth.isAuthenticated ? "Player" : "Not logged in"}
+                {auth.isLoggedIn ? "Player" : "Not logged in"}
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ function SideBar({ setAuthModalOpen }) {
             onClick={handleLoginToggle}
             className="w-full bg-[#f95e5e] text-white px-6 py-3 rounded-lg hover:bg-[#d94545] transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            {auth.isAuthenticated ? "Logout" : "Login"}
+            {auth.isLoggedIn ? "Logout" : "Login"}
           </button>
         </div>
       </div>

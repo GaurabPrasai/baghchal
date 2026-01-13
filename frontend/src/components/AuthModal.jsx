@@ -2,13 +2,12 @@ import { useState, useContext } from "react";
 import BaseModal from "./ui/BaseModal";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import SecondaryButton from "./ui/SecondaryButton";
 import PrimaryButton from "./ui/PrimaryButton";
-import { generateUsername } from "unique-username-generator";
+
 export default function AuthModal({ isOpen, onClose }) {
   const baseHttpUrl = import.meta.env.VITE_BASE_HTTP_URL;
   const [mode, setMode] = useState("login");
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -33,20 +32,13 @@ export default function AuthModal({ isOpen, onClose }) {
     }));
   };
 
-  const handleContinueAsGuest = () => {
-    const guestId = generateUsername("", "", 12);
-    setAuth({ isAuthenticated: false, guestId: guestId });
-    console.log("Guest ID:", guestId);
-    onClose();
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      // signup
+      // Signup
       if (mode === "signup") {
         const data = new FormData();
         data.append("username", formData.username);
@@ -60,18 +52,19 @@ export default function AuthModal({ isOpen, onClose }) {
         });
 
         setMessage("Signup successful! You can now log in.");
+        setMessageType("success");
         setMode("login");
       } else {
-        // #login
+        // Login
         const response = await axios.post(`${baseHttpUrl}login/`, {
           username: formData.username,
           password: formData.password,
         });
         setMessage("Login successful!");
         const userData = response.data.user_data;
-        setAuth({ user: userData, isAuthenticated: true });
+        setAuth({ isLoggedIn: true, user: userData });
         console.log(userData);
-        console.log("authenticated");
+        console.log("Logged In");
         onClose();
       }
     } catch (error) {
@@ -151,15 +144,6 @@ export default function AuthModal({ isOpen, onClose }) {
         >
           {mode === "login" ? "Log In" : "Create Account"}
         </PrimaryButton>
-
-        {/* Guestbutton  */}
-        {!auth.guestId ? (
-          <SecondaryButton onClick={handleContinueAsGuest}>
-            Continue as Guest
-          </SecondaryButton>
-        ) : (
-          ""
-        )}
 
         <Alert message={message} type={messageType} />
 
