@@ -1,72 +1,207 @@
-# Baghchal Online – CS50 Web Final Project  
-**Video demo:** [https://youtu.be/wQ3ESM5QZJc](https://youtu.be/wQ3ESM5QZJc)
+# Bagh Chal - Traditional Nepali Strategy Game
 
-**Live at:** [https://baghchal-2srv.onrender.com/](https://baghchal-2srv.onrender.com/)
+A modern web implementation of Bagh Chal (Tigers and Goats), a traditional asymmetric strategy board game from Nepal. Play online with real-time multiplayer functionality.
 
-## Introduction
+## 🎮 About the Game
 
-For my final project, I  built an online two-player version of baghchal, a classic Nepali strategy game. I grew up playing this game on  with pebbles, and always wanted to bring it to the web as a multiplayer game. . Most versions available online are either single-player or limited in functionality, so I thought of making a modern multiplayer version.
+Bagh Chal is a two-player strategy game where:
 
-The app allows users to create an account and then either join or create a game room. Once two players are connected, they can play as goats or tigers on a live board. The game updates in real-time using WebSockets, and the rules — including valid moves, turn logic, and capture rules — are enforced on the backend.
+- **4 Tigers** hunt and capture goats by jumping over them
+- **20 Goats** try to block all tiger movements to win
+- Tigers win by capturing 5 goats
+- Goats win by immobilizing all tigers
 
----
-
-## Distinctiveness and Complexity
-
-I believe this project stands out from the ones we built in the course in a few ways. First, it's a **real-time multiplayer game**, which none of our past projects involved. It uses **Django Channels** and WebSockets to let two users play simultaneously, which added a layer of technical depth beyond traditional HTTP.
-
-Second, the game itself isn’t something simple like chat or a blog — it required me to **implement all the rules of Baghchal**, including how goats move, how tigers capture, turn switching, and checking win conditions. This logic lives in a custom Python module(as well as in client side)  I wrote and tested manually with dozens of scenarios.
-
-On the frontend, I used **Vite + React**. I also handled sync between WebSocket messages and the local board state — which wasn't always easy to debug. Plus, I made sure everything works well on both mobile and desktop.
-
-Overall, combining backend game logic, real-time sync, authentication, and a responsive UI made this project more challenging (and satisfying) than the earlier projects.
----
-
-## File Overview
-
-- **`backend/`** – Django backend with two apps:
-  - `avatars/`** – Stores uploaded profile pictures.
-  - `core/` handles user auth, avatars, and API endpoints.
-  - `baghchal/` contains game logic, WebSocket consumer, routing, and views.
-  - `board.py` inside `baghchal/` has all the core logic for validating and applying moves.
-- **`requirements.txt`** – All Python dependencies.
-- **`frontend/`** – Vite + React app:
-  - `src/components/` – React components like the board, modals, and user interface.
-  - `src/context/` – Auth and WebSocket context providers.
-  - `src/routes/` – Pages like Home, Game, Login, Register.
-
----
-
-## How to Run
+## 🛠️ Tech Stack
 
 ### Backend
-```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
 
-```
+- **Django 5.2.4** - Web framework
+- **Django Channels** - WebSocket support for real-time gameplay
+- **Django REST Framework** - API endpoints
+- **SQLite** - Database (development)
 
 ### Frontend
-   ```bash
-   # 1. Navigate to the frontend directory:
-   cd frontend
-  # 2. Install dependencies:
-   npm install
-  # 3. Start the development server:
-   npm run dev
+
+- **React 19** - UI library
+- **Vite** - Build tool and dev server
+- **Tailwind CSS 4** - Styling
+- **React Router 7** - Client-side routing
+- **Axios** - HTTP client
+
+## 📋 Prerequisites
+
+- Python 3.8+
+- Node.js 18+
+- npm or yarn
+
+## 🚀 Quick Start
+
+### Backend Setup
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py migrate
+
+# Start development server
+python manage.py runserver
 ```
- ___ 
-## Notes
 
-- You’ll need to register two accounts to test two-player gameplay in real time.
-- react uses browser's local storage so make sure to keep user data so please use different browsers if possible or use a regular window and one in incognito.
-- Django Channels handles WebSocket connections; Redis is not required for local testing.
+Backend runs on `http://localhost:8000`
 
----
+### Frontend Setup
 
-If you're reviewing this as part of the CS50 Web staff — thank you!  
-This project pushed me beyond the scope of the course and helped me apply everything from real-time communication to frontend state management. Plus, it’s based on a game from my culture, which made building it even more meaningful.
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Frontend runs on `http://localhost:5173`
+
+## 📁 Project Structure
+
+```
+baghchal/
+├── backend/
+│   ├── backend/          # Django project settings
+│   ├── baghchal/         # Game logic app
+│   │   ├── core/         # Game state management
+│   │   ├── consumers.py  # WebSocket handlers
+│   │   ├── routing.py    # WebSocket URL routing
+│   │   └── views.py      # HTTP views
+│   ├── core/             # User management app
+│   └── manage.py
+│
+└── frontend/
+    ├── src/
+    │   ├── components/   # Reusable UI components
+    │   ├── routes/       # Page components
+    │   ├── context/      # React context (Auth, WebSocket)
+    │   └── assets/       # Images and static files
+    └── package.json
+```
+
+## 🎯 Core Features
+
+- **Real-time Multiplayer** - WebSocket-based game synchronization
+- **Multiple Game Modes**:
+  - Create private game with custom ID
+  - Join existing game
+  - Quick match (auto-matching)
+- **Guest Play** - No account required
+- **User Accounts** - Optional registration for tracking stats
+- **Move Validation** - Server-side game rule enforcement
+- **Responsive Design** - Works on desktop and mobile
+
+## 🔧 Configuration
+
+### Environment Variables
+
+**Frontend** (`frontend/.env`):
+
+```env
+VITE_BASE_WS_URL=ws://localhost:8000/ws/game/
+VITE_BASE_HTTP_URL=http://localhost:8000/
+```
+
+**Backend** (`backend/backend/settings.py`):
+
+- Debug mode: Set `DEBUG = True` for development
+- Allowed hosts: Update `ALLOWED_HOSTS` for production
+- CORS: Configure `CORS_ALLOWED_ORIGINS`
+
+## 🧪 Development
+
+### Running Tests
+
+```bash
+# Backend tests
+cd backend
+python manage.py test
+
+# Frontend tests (when implemented)
+cd frontend
+npm test
+```
+
+### Code Quality
+
+```bash
+# Frontend linting
+cd frontend
+npm run lint
+```
+
+## 🎨 Game Logic
+
+The game engine is split between frontend and backend:
+
+- **Frontend** (`MoveValidation.js`): Client-side move validation for instant feedback
+- **Backend** (`baghchal/core/utils.py`): Authoritative game state and validation
+- **WebSocket** (`consumers.py`): Real-time state synchronization
+
+### Game States
+
+- `waiting` - Waiting for second player
+- `ongoing` - Game in progress
+- `over` - Game completed
+
+### Game Phases
+
+- `placement` - Goats being placed on board (first 20 moves)
+- `displacement` - Both players moving pieces
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Make your changes**
+4. **Test thoroughly**
+5. **Commit** (`git commit -m 'Add amazing feature'`)
+6. **Push** (`git push origin feature/amazing-feature`)
+7. **Open a Pull Request**
+
+### Areas for Contribution
+
+- [ ] Game statistics and leaderboards
+- [ ] AI opponent (minimax preferably)
+- [ ] Sound effects and animations
+- [ ] Spectator mode
+- [ ] Game replay functionality
+
+### HTTP Endpoints
+
+- `POST /signup/` - User registration
+- `POST /login/` - User authentication
+- `GET /` - API health check
+
+### WebSocket
+
+- `ws://localhost:8000/ws/game/?game_id={id}&mode={mode}&username={user}`
+  - `mode`: `create`, `join`, `quick`, `rejoin`
+  - `play_as`: `tiger` or `goat` (optional)
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 📞 Contact
+
+For questions or suggestions, please open an issue on GitHub.
