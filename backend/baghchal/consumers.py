@@ -131,7 +131,7 @@ class GameConsumer(WebsocketConsumer):
                 for k, v in initial_state["player"].items():
                     if not v:
                         initial_state["player"][k] = self.username
-                        # After assigning, check if all slots are now filled
+                        # if both players are connected     , change status to ongoing
                         if (
                             all(initial_state["player"].values())
                             and initial_state["status"] == "waiting"
