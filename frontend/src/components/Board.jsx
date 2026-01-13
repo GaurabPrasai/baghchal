@@ -103,7 +103,7 @@ const Board = ({
     }
   };
 
-  // handle hover
+  // Todo: implement handle piece hover
   const handlePieceHover = (row, col, isEntering) => {};
 
   // draw grid lines
