@@ -4,7 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import SecondaryButton from "./ui/SecondaryButton";
 import PrimaryButton from "./ui/PrimaryButton";
-
+import { generateUsername } from "unique-username-generator";
 export default function AuthModal({ isOpen, onClose }) {
   const baseHttpUrl = import.meta.env.VITE_BASE_HTTP_URL;
   const [mode, setMode] = useState("login");
@@ -34,7 +34,7 @@ export default function AuthModal({ isOpen, onClose }) {
   };
 
   const handleContinueAsGuest = () => {
-    const guestId = crypto.randomUUID();
+    const guestId = generateUsername("", "", 12);
     setAuth({ isAuthenticated: false, guestId: guestId });
     console.log("Guest ID:", guestId);
     onClose();
