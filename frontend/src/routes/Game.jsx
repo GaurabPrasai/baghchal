@@ -45,7 +45,7 @@ const Game = () => {
     window.addEventListener("beforeunload", handleBeforeUnload);
     // cleanup
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [gameState]);
+  }, [gameState, isGameInProgress]);
 
   // Handle in-app navigation blocking
   useEffect(() => {
