@@ -168,11 +168,30 @@ function WinnerModal({ winner, isOpen, onClose }) {
   if (!isOpen) return null;
   const navigate = useNavigate();
 
+  // go to homepage when enter key pressed
+  useEffect(() => {
+    addEventListener("keydown", (event) => {
+      if (event.key == "Enter") {
+        navigateHome();
+      }
+    });
+
+    return () => {
+      removeEventListener("keydown");
+    };
+  }, []);
+
+  const navigateHome = () => {
+    onClose();
+    navigate("/");
+  };
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          navigateHome();
+        }
       }}
     >
       <div className="bg-[#2f2d2a] rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 text-center border border-[#3a3835]">
@@ -180,10 +199,7 @@ function WinnerModal({ winner, isOpen, onClose }) {
         <h2 className="text-3xl font-bold mb-3 text-white">Game Over!</h2>
         <p className="mb-8 text-xl text-gray-300">{winner} wins!</p>
         <button
-          onClick={() => {
-            onClose();
-            navigate("/");
-          }}
+          onClick={navigateHome}
           className="bg-[#f95e5e] hover:bg-[#d94545] px-8 py-3 rounded-lg text-white font-semibold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
         >
           Return Home
@@ -212,6 +228,14 @@ const WaitingModal = ({ isOpen }) => {
 };
 
 const LeaveConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
+  // handle confirm and cancel with keyboard
+  useEffect(() => {
+    addEventListener("keydown", (event) => {
+      if (event.key == "Enter") onConfirm();
+      else if (event.key == "Escape") onCancel();
+    });
+  }, []);
+
   return (
     <BaseModal isOpen={isOpen} onClose={onCancel} title="Leave Game?">
       <div className="space-y-6">
