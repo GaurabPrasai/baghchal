@@ -11,7 +11,6 @@ export default function AuthModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    displayName: "",
     password: "",
     avatar: null,
   });
@@ -44,12 +43,10 @@ export default function AuthModal({ isOpen, onClose }) {
         data.append("username", formData.username);
         data.append("email", formData.email);
         data.append("password", formData.password);
-        data.append("first_name", formData.displayName);
+        // data.append("first_name", formData.displayName);
         if (formData.avatar) data.append("avatar", formData.avatar);
 
-        await axios.post(`${baseHttpUrl}signup/`, data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.post(`${baseHttpUrl}signup/`, data);
 
         setMessage("Signup successful! You can now log in.");
         setMessageType("success");
@@ -102,15 +99,6 @@ export default function AuthModal({ isOpen, onClose }) {
                 value={formData.email}
                 onChange={handleChange}
                 required
-              />
-            </FormField>
-
-            <FormField label="Display Name">
-              <Input
-                name="displayName"
-                placeholder="How should we call you?"
-                value={formData.displayName}
-                onChange={handleChange}
               />
             </FormField>
 
