@@ -33,7 +33,7 @@ class GameConsumer(WebsocketConsumer):
             self.close(code=4000)
             return
 
-        if self.mode != "quick":
+        if self.mode != "quick" and not self.game_id:
             print("Error: Invalid game ID for non-quick mode")
             self.close(code=4000)
             return
