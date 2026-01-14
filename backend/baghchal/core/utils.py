@@ -225,6 +225,7 @@ def cleanup_game_states(game_states):
 def schedule_game_removal(game_states, game_id):
     def remove_game():
         # TODO: store the game to the database
+        print("Removing Game: ", game_id)
         game_states.pop(game_id, None)
 
     # ? may be using different times for different condition is better
