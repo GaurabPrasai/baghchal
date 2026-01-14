@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 
@@ -25,8 +25,8 @@ const initialGameState = {
 
 export const WebSocketContext = createContext(null);
 export const useWebSocket = () => useContext(WebSocketContext);
+
 const baseSocketUrl = import.meta.env.VITE_BASE_WS_URL;
-console.log("baseSocketUrl: ", baseSocketUrl);
 
 export const WebSocketProvider = ({ children }) => {
   const { auth } = useContext(AuthContext);
@@ -34,49 +34,13 @@ export const WebSocketProvider = ({ children }) => {
   const socketRef = useRef(null);
   const [gameState, setGameState] = useState(initialGameState);
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionParams, setConnectionParams] = useState(null);
 
-  // connect to the server websocket
   const connect = (gameId = "", mode = "", playAs = "") => {
-    if (socketRef.current) {
-      socketRef.current.close();
-    }
-    const params = new URLSearchParams({
-      game_id: gameId,
-      mode: mode,
-      play_as: playAs,
-      username: auth.isLoggedIn ? auth.user.username : auth.guestId,
-    });
-    const wsUrl = `${baseSocketUrl}?${params}`;
-
-    socketRef.current = new WebSocket(wsUrl);
-
-    socketRef.current.onopen = () => {
-      setIsConnected(true);
-    };
-
-    // update and locate to game on new gameState
-    socketRef.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const newGameState = data.message?.game_state;
-      if (newGameState) {
-        setGameState(newGameState);
-        if (!window.location.pathname.includes("/game/")) {
-          navigate(`/game/${newGameState.game_id}`);
-        }
-      }
-    };
-
-    socketRef.current.onclose = () => {
-      setIsConnected(false);
-      console.log("WebSocket closed");
-    };
-
-    socketRef.current.onerror = (error) => {
-      console.error("WebSocket error:", error);
-      setIsConnected(false);
-    };
+    setConnectionParams({ gameId: gameId, mode: mode, playAs: playAs });
   };
 
+  // ? should change state adn not "do stuffs"
   const send = (message) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(message);
@@ -85,6 +49,7 @@ export const WebSocketProvider = ({ children }) => {
     }
   };
 
+  // ? should change state and not "do stuffs"
   const disconnect = () => {
     if (socketRef.current) {
       socketRef.current.close();
@@ -92,6 +57,68 @@ export const WebSocketProvider = ({ children }) => {
     }
     setIsConnected(false);
   };
+
+  useEffect(() => {
+    // ? if (!connectionParams.gameId && !connectionParams.mode) { # there is no game id for quick mode. does it need a fix ?
+    if (!connectionParams?.mode) {
+      return;
+    }
+    // close existing websocket
+    if (socketRef.current) socketRef.current.close();
+    const username = auth.isLoggedIn ? auth.usr.username : auth.guestId;
+    const params = new URLSearchParams({
+      game_id: connectionParams.gameId,
+      mode: connectionParams.mode,
+      play_as: connectionParams.playAs,
+      username: username,
+    });
+
+    // establish a connection to the server (ie. create instance)
+    const ws = new WebSocket(`${baseSocketUrl}?${params}`);
+
+    ws.onopen = handleOpen;
+    ws.onmessage = handleMessage;
+    ws.onclose = handleClose;
+    ws.onerror = handleError;
+
+    socketRef.current = ws;
+  }, [connectionParams?.mode, connectionParams?.gameId, auth]);
+
+  const handleOpen = () => {
+    setIsConnected(true);
+    console.log("WebSocket connected");
+  };
+
+  const handleMessage = (event) => {
+    const data = JSON.parse(event.data);
+    const newGameState = data.message?.game_state;
+
+    if (newGameState) {
+      setGameState(newGameState);
+      if (!window.location.pathname.includes("/game/")) {
+        navigate(`/game/${newGameState.game_id}`);
+      }
+    }
+  };
+
+  const handleClose = () => {
+    setIsConnected(false);
+    console.log("WebSocket closed");
+  };
+
+  const handleError = (error) => {
+    console.error("WebSocket error:", error);
+    setIsConnected(false);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    };
+  }, []);
 
   return (
     <WebSocketContext.Provider
