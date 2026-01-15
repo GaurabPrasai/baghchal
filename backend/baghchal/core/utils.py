@@ -1,5 +1,6 @@
 import threading
 from .gameState import game_states
+from baghchal.models import Game
 
 
 def get_initial_game_state():
@@ -207,8 +208,10 @@ def cleanup_game_states(game_states):
     """Removes completed or abandoned games from game_states"""
     for game_id, game_state in list(game_states.items()):
         # Remove finished games after delay
+        # TODO: store the game to the database
         if game_state.get("status") == "over":
-            schedule_game_removal(game_states, game_id)
+            store_game(game_id, game_state)
+            schedule_game_removal(game_states, game_id, 30)
 
         # Remove truly abandoned games (no players at all)
         elif not any(game_state.get("player", {}).values()):
@@ -222,14 +225,13 @@ def cleanup_game_states(game_states):
                 pass
 
 
-def schedule_game_removal(game_states, game_id):
+def schedule_game_removal(game_states, game_id, delay=0):
     def remove_game():
-        # TODO: store the game to the database
         print("Removing Game: ", game_id)
         game_states.pop(game_id, None)
 
     # ? may be using different times for different condition is better
-    timer = threading.Timer(30, remove_game)
+    timer = threading.Timer(delay, remove_game)
     timer.daemon = True
     timer.start()
 
@@ -248,3 +250,15 @@ def to_user_coord(key):
         return ""
     r, c = map(int, key.split("-"))
     return f"{r + 1}-{c + 1}"
+
+
+def store_game(game_id, gamestate):
+    game = Game(
+        game_id=game_id,
+        goat_player=gamestate["player"]["goat"],
+        tiger_player=gamestate["player"]["tiger"],
+        winning_layer=gamestate["winner"],
+        move_data=gamestate["winner"],
+    )
+    game.save()
+    print("Game stored: ", game_id)
