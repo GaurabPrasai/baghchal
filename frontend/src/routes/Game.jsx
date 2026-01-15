@@ -1,7 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { useWebSocket } from "../context/WebSocketContext";
 import Board from "../components/Board";
-import { useParams, useNavigate, useBlocker } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useBlocker,
+  isRouteErrorResponse,
+} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import useSound from "use-sound";
 import moveSound from "../assets/move_sound.mp3";
@@ -11,7 +16,7 @@ import BaseModal from "../components/ui/BaseModal";
 
 const Game = () => {
   const { auth } = useContext(AuthContext);
-  const { send, gameState, isConnected, connect } = useWebSocket();
+  const { send, gameState, isConnected, connect, disconnect } = useWebSocket();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [winner, setWinner] = useState("");
@@ -57,8 +62,11 @@ const Game = () => {
 
   useEffect(() => {
     if (gameId && !isConnected) {
-      connect(gameId, "rejoin");
+      connect(gameId, "join");
     }
+  }, []);
+
+  useEffect(() => {
     if (gameState) {
       if (gameState.newPosition) {
         playMoveSound();
@@ -78,13 +86,22 @@ const Game = () => {
 
   const handleMoveSend = (move) => {
     console.log("sending move ", move);
-    send(JSON.stringify(move));
+    send(
+      JSON.stringify({
+        message: {
+          type: "newMove",
+          move: move,
+        },
+      })
+    );
   };
 
   const handleLeaveConfirm = () => {
     setShowLeaveConfirmation(false);
     if (pendingNavigation) {
       pendingNavigation();
+      send(JSON.stringify({ message: { type: "exitGame" } }));
+      disconnect();
       setPendingNavigation(null);
     }
   };
@@ -168,18 +185,18 @@ function WinnerModal({ winner, isOpen, onClose }) {
   if (!isOpen) return null;
   const navigate = useNavigate();
 
-  // go to homepage when enter key pressed
   useEffect(() => {
-    addEventListener("keydown", (event) => {
+    const navigate_home_key_handler = (event) => {
       if (event.key == "Enter") {
         navigateHome();
       }
-    });
+    };
+    if (isOpen) addEventListener("keydown", navigate_home_key_handler);
 
     return () => {
-      removeEventListener("keydown");
+      removeEventListener("keydown", navigate_home_key_handler);
     };
-  }, []);
+  }, [isOpen]);
 
   const navigateHome = () => {
     onClose();
@@ -230,11 +247,17 @@ const WaitingModal = ({ isOpen }) => {
 const LeaveConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
   // handle confirm and cancel with keyboard
   useEffect(() => {
-    addEventListener("keydown", (event) => {
-      if (event.key == "Enter") onConfirm();
-      else if (event.key == "Escape") onCancel();
-    });
-  }, []);
+    const confirm_key_handler = (event) => {
+      if (event.key == "Enter") {
+        event.preventDefault();
+        // console.log("confirm exit");
+        onConfirm();
+      } else if (event.key == "Escape") onCancel();
+    };
+    if (isOpen) addEventListener("keydown", confirm_key_handler);
+
+    return () => removeEventListener("keydown", confirm_key_handler);
+  }, [isOpen]);
 
   return (
     <BaseModal isOpen={isOpen} onClose={onCancel} title="Leave Game?">
