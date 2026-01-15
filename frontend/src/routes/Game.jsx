@@ -199,6 +199,8 @@ function WinnerModal({ winner, isOpen, onClose }) {
   }, [isOpen]);
 
   const navigateHome = () => {
+    send(JSON.stringify({ message: { type: "exitGame" } }));
+    disconnect();
     onClose();
     navigate("/");
   };
