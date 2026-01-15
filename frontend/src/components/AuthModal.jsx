@@ -46,8 +46,9 @@ export default function AuthModal({ isOpen, onClose }) {
         // data.append("first_name", formData.displayName);
         if (formData.avatar) data.append("avatar", formData.avatar);
 
-        await axios.post(`${baseHttpUrl}signup/`, data);
-
+        await axios.post(`${baseHttpUrl}signup/`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         setMessage("Signup successful! You can now log in.");
         setMessageType("success");
         setMode("login");
