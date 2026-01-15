@@ -81,27 +81,23 @@ Frontend runs on `http://localhost:5173`
 ## 🎯 How to Play
 
 **Start a Game:**
-
 Create a new game and share the ID with a friend
 Join an existing game using a game ID
 Use Quick Match to find an opponent
 
 **Placement Phase:**
-
 Goat player places one goat per turn on any empty intersection
 Tiger player can move or capture goats
 
 **Movement Phase:**
-
 After all 20 goats are placed, goats can now move
 Both players move strategically to achieve their win condition
 
-**Winning:**
-
-Tigers win: Capture 5 goats
+**Winnng:**
+Tigers win: Capture 5 goats    
 Goats win: Block all tiger movements
 
-\*\*For detailed rules, [visit the in-game Rules page](https://baghchal-2srv.onrender.com/rules)
+**For detailed rules, [visit the in-game Rules page](https://baghchal-2srv.onrender.com/rules)**
 
 ## 📁 Project Structure
 
@@ -206,7 +202,8 @@ We welcome contributions! Here's how to get started:
 4. **Test thoroughly**
 5. **Commit** (`git commit -m 'Add amazing feature'`)
 6. **Push** (`git push origin feature/amazing-feature`)
-7. **Open a Pull Request**
+7. **Sync your Fork with main repo**
+8. **Open a Pull Request**
 
 ### Areas for Contribution
 
