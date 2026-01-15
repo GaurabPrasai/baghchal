@@ -55,6 +55,7 @@ const Game = () => {
     }
   }, [blocker]);
 
+  // handle joining via url
   useEffect(() => {
     if (gameId && !isConnected) {
       connect(gameId, "join");
@@ -64,8 +65,8 @@ const Game = () => {
   useEffect(() => {
     if (!gameState) return;
 
+    // play move sound  if a piece's position has changed
     if (
-      // play move sound if a piece's position has changed
       gameState.newPosition &&
       gameState.newPosition != gameState.oldPositiion
     ) {
