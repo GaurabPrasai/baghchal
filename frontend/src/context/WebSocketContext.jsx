@@ -65,7 +65,7 @@ export const WebSocketProvider = ({ children }) => {
     }
     // close existing websocket
     if (socketRef.current) socketRef.current.close();
-    const username = auth.isLoggedIn ? auth.usr.username : auth.guestId;
+    const username = auth.isLoggedIn ? auth.user.username : auth.guestId;
     const params = new URLSearchParams({
       game_id: connectionParams.gameId,
       mode: connectionParams.mode,
