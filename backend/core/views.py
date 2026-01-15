@@ -16,7 +16,6 @@ def signup(request):
     username = data.get("username")
     password = data.get("password")
     email = data.get("email")
-    # display_name = data.get('displayName', username)
     avatar = request.FILES.get("avatar")
 
     if not (username and password and email):
