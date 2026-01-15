@@ -34,8 +34,6 @@ Bagh Chal is a two-player strategy game where:
 - Node.js 18+
 - npm or yarn
 
-## 🚀 Quick Start
-
 ### Backend Setup
 
 ```bash
@@ -44,13 +42,20 @@ cd backend
 
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Run migrations
 python manage.py migrate
+
+# Create superuser (optional)
+python manage.py createsuperuser
 
 # Start development server
 python manage.py runserver
@@ -60,7 +65,7 @@ Backend runs on `http://localhost:8000`
 
 ### Frontend Setup
 
-```bash
+```
 # Navigate to frontend directory
 cd frontend
 
@@ -72,6 +77,31 @@ npm run dev
 ```
 
 Frontend runs on `http://localhost:5173`
+
+## 🎯 How to Play
+
+**Start a Game:**
+
+Create a new game and share the ID with a friend
+Join an existing game using a game ID
+Use Quick Match to find an opponent
+
+**Placement Phase:**
+
+Goat player places one goat per turn on any empty intersection
+Tiger player can move or capture goats
+
+**Movement Phase:**
+
+After all 20 goats are placed, goats can now move
+Both players move strategically to achieve their win condition
+
+**Winning:**
+
+Tigers win: Capture 5 goats
+Goats win: Block all tiger movements
+
+\*\*For detailed rules, [visit the in-game Rules page](https://baghchal-2srv.onrender.com/rules)
 
 ## 📁 Project Structure
 
