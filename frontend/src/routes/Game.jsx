@@ -67,14 +67,18 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (gameState) {
-      if (gameState.newPosition) {
-        playMoveSound();
-      }
-      if (gameState.status === "over") {
-        setWinner(gameState.winner);
-        setModalOpen(true);
-      }
+    if (!gameState) return;
+
+    if (
+      // play move sound if a piece's position has changed
+      gameState.newPosition &&
+      gameState.newPosition != gameState.oldPositiion
+    ) {
+      playMoveSound();
+    }
+    if (gameState.status === "over") {
+      setWinner(gameState.winner);
+      setModalOpen(true);
     }
   }, [gameState, gameId, isConnected, connect, playMoveSound]);
 
@@ -112,6 +116,13 @@ const Game = () => {
       blocker.reset();
     }
     setPendingNavigation(null);
+  };
+
+  const handleWinnerModelClick = () => {
+    setModalOpen(false);
+    send(JSON.stringify({ message: { type: "exitGame" } }));
+    disconnect();
+    navigate("/");
   };
 
   if (!isConnected || !gameState) {
@@ -167,7 +178,7 @@ const Game = () => {
       <WinnerModal
         winner={winner}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClick={handleWinnerModelClick}
       />
       <WaitingModal isOpen={gameState?.status === "waiting"} />
       <LeaveConfirmationModal
@@ -181,14 +192,13 @@ const Game = () => {
 
 export default Game;
 
-function WinnerModal({ winner, isOpen, onClose }) {
+function WinnerModal({ winner, isOpen, onClick }) {
   if (!isOpen) return null;
-  const navigate = useNavigate();
 
   useEffect(() => {
     const navigate_home_key_handler = (event) => {
       if (event.key == "Enter") {
-        navigateHome();
+        onClick();
       }
     };
     if (isOpen) addEventListener("keydown", navigate_home_key_handler);
@@ -198,18 +208,12 @@ function WinnerModal({ winner, isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const navigateHome = () => {
-    send(JSON.stringify({ message: { type: "exitGame" } }));
-    disconnect();
-    onClose();
-    navigate("/");
-  };
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
-          navigateHome();
+          onClick();
         }
       }}
     >
@@ -218,7 +222,7 @@ function WinnerModal({ winner, isOpen, onClose }) {
         <h2 className="text-3xl font-bold mb-3 text-white">Game Over!</h2>
         <p className="mb-8 text-xl text-gray-300">{winner} wins!</p>
         <button
-          onClick={navigateHome}
+          onClick={onClick}
           className="bg-[#f95e5e] hover:bg-[#d94545] px-8 py-3 rounded-lg text-white font-semibold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
         >
           Return Home
