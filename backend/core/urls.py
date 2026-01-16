@@ -5,7 +5,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index),
     path('signup/', views.signup),
-    path('login/', views.login)
+    path('login/', views.login),
+    path('google-auth/', views.google_auth)
+
 ]
 
 if settings.DEBUG:
