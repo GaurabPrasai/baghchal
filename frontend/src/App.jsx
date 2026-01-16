@@ -10,6 +10,7 @@ import { WebSocketProvider } from "./context/WebSocketContext";
 import Rules from "./routes/Rules";
 import AuthModal from "./components/AuthModal";
 import { generateUsername } from "unique-username-generator";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Get user data from localStorage, guest ID from sessionStorage
 const storedUser = JSON.parse(localStorage.getItem("auth")) || {};
@@ -21,6 +22,8 @@ const initialAuth =
     : storedGuest.guestId
     ? { isLoggedIn: false, guestId: storedGuest.guestId }
     : { isLoggedIn: false };
+
+const GOOGLE_CLIENT_ID = "611135257481-5tv07uu56cf811lle2cdduubh43gu018.apps.googleusercontent.com";
 
 function App() {
   const [auth, setAuth] = useState(initialAuth);
@@ -37,7 +40,6 @@ function App() {
   useEffect(() => {
     if (auth.isLoggedIn && auth.user) {
       // User is logged in, save to localStorage and clear guest data
-
       localStorage.setItem(
         "auth",
         JSON.stringify({
@@ -47,7 +49,7 @@ function App() {
       );
       sessionStorage.removeItem("guestAuth");
     } else if (auth.guestId) {
-      // User is a guest - save to sessionStorage and cler user data
+      // User is a guest - save to sessionStorage and clear user data
       sessionStorage.setItem(
         "guestAuth",
         JSON.stringify({
@@ -103,13 +105,15 @@ function App() {
   ]);
 
   return (
-    <AuthContext value={{ auth, setAuth }}>
-      <RouterProvider router={router} />
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-      />
-    </AuthContext>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AuthContext value={{ auth, setAuth }}>
+        <RouterProvider router={router} />
+        <AuthModal
+          isOpen={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+        />
+      </AuthContext>
+    </GoogleOAuthProvider>
   );
 }
 
