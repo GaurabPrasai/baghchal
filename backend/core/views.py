@@ -1,13 +1,8 @@
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from .models import User
 from .serializers import UserSerializer
-from google.oauth2 import id_token
-from google.auth.transport import requests
-import os
-
 
 
 @api_view(["GET"])
@@ -66,71 +61,3 @@ def login(request):
     print("_------------successfully logged in------------")
     print(serializer.data)
     return Response({"user_data": serializer.data}, status=200)
-
-@csrf_exempt
-@api_view(["POST"])
-def google_auth(request):
-    token = request.data.get("token")
-    mode = request.data.get("mode", "login")
-
-    if not token:
-        return Response({"error": "No token provided"}, status=400)
-    try:
-        # Verify the Google token
-        client_id = os.environ.get("GOOGLE_CLIENT_ID")
-        if not client_id:
-            return Response({"error": "Google client ID not configured"},status=500)
-
-        try:  
-            idinfo = id_token.verify_oauth2_token(
-                token, 
-                requests.Request(), 
-                client_id,
-                clock_skew_in_seconds=30 # hopefully don't cause issue in production
-            )
-            print("Verification successful!")
-            
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            return Response({"error": str(e)}, status=400)
-
-        email = idinfo['email']
-        google_id = idinfo.get('sub')
-        name = idinfo.get('name', '')
-        picture = idinfo.get('picture', '')
-
-        if not email:
-            return Response({"error": "No email from google"}, status=400)
-
-        try:
-            user = User.objects.get(email=email)
-
-            # authenticate the user but doesn't have password 
-        except User.DoesNotExist: # if doesn't exist, create and login
-
-            # Create new user from Google data
-            username = email.split('@')[0] # Generate username from email
-            
-            user = User.objects.create(
-                username=username,
-                email=email,
-                first_name=name.split()[0] if name else '',
-                last_name=' '.join(name.split()[1:]) if len(name.split()) > 1 else ''
-            )
-            
-            # Set unusable password since they're using Google OAuth
-            user.set_unusable_password()
-            user.save()
-
-        # send user data for signup and login both 
-        serializer = UserSerializer(user)
-        print(f"Google login successful: {email}")
-        return Response({"user_data": serializer.data,}, status=200)
-
-    except ValueError as e:
-        print(f"ValueError: {str(e)}")
-        return Response({"error": f"Invalid Google token: {str(e)}"}, status=400)
-    except Exception as e:
-        print(f"Exception: {str(e)}")
-        return Response({"error": f"Authentication failed: {str(e)}"}, status=500)

@@ -3,12 +3,9 @@ import BaseModal from "./ui/BaseModal";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import PrimaryButton from "./ui/PrimaryButton";
-import { GoogleLogin } from "@react-oauth/google";
 
 export default function AuthModal({ isOpen, onClose }) {
-  const baseHttpUrl =
-    import.meta.env.VITE_BASE_HTTP_URL || "http://127.0.0.1:8000/";
-
+  const baseHttpUrl = import.meta.env.VITE_BASE_HTTP_URL;
   const [mode, setMode] = useState("login");
   const { setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -33,59 +30,13 @@ export default function AuthModal({ isOpen, onClose }) {
       [name]: files ? files[0] : value,
     }));
   };
-
-  // Handle Google OAuth
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    setMessage("");
-    console.log("credential:", credentialResponse.credential);
-
-    try {
-      const response = await fetch(`${baseHttpUrl}google-auth/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: credentialResponse.credential,
-          mode: mode,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle error responses (400, 500, etc.)
-        setMessage(data.error || "Authentication failed");
-        setMessageType("error");
-        return;
-      }
-
-      // Success
-      const userData = data.user_data;
-      setAuth({ isLoggedIn: true, user: userData });
-      setMessage(`Google ${mode} successful!`);
-      setMessageType("success");
-
-      // Close modal after successful login/signup
-      setTimeout(() => {
-        onClose();
-      }, 500);
-    } catch (error) {
-      console.error("Google auth error:", error);
-      setMessage("Network error. Please try again.");
-      setMessageType("error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
+      // Signup
       if (mode === "signup") {
         const data = new FormData();
         data.append("username", formData.username);
@@ -101,23 +52,21 @@ export default function AuthModal({ isOpen, onClose }) {
         setMessageType("success");
         setMode("login");
       } else {
+        // Login
         const response = await axios.post(`${baseHttpUrl}login/`, {
           username: formData.username,
           password: formData.password,
         });
         setMessage("Login successful!");
-        setMessageType("success");
         const userData = response.data.user_data;
         setAuth({ isLoggedIn: true, user: userData });
-
-        setTimeout(() => {
-          onClose();
-        }, 500);
+        console.log(userData);
+        console.log("Logged In");
+        onClose();
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.error || "An error occurred";
+      const errorMsg = "Error: " + error.response?.data?.error;
       setMessage(errorMsg);
-      setMessageType("error");
     } finally {
       setLoading(false);
     }
@@ -127,44 +76,9 @@ export default function AuthModal({ isOpen, onClose }) {
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={
-        (mode === "login" ? "🔐 " : "👤 ") +
-        (mode === "login" ? "Login" : "Sign Up")
-      }
+      title={(mode === "login" ? "🔐" : "👤") + mode}
     >
       <div className="space-y-6">
-        {/* Google Authentication Button */}
-        <div className="space-y-3">
-          <div className="flex justify-center">
-            <div className="w-full max-w-xs">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => {
-                  setMessage("Google authentication failed");
-                  setMessageType("error");
-                }}
-                size="large"
-                text={mode === "login" ? "signin_with" : "signup_with"}
-                shape="rectangular"
-                theme="filled_black"
-                logo_alignment="left"
-              />
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#3a3835]"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="px-4 bg-[#2f2d2a] text-gray-400 text-sm font-medium">
-                Or {mode === "login" ? "sign in" : "sign up"} with email
-              </span>
-            </div>
-          </div>
-        </div>
-
         <FormField label="Username">
           <Input
             name="username"
@@ -210,7 +124,7 @@ export default function AuthModal({ isOpen, onClose }) {
           />
         </FormField>
 
-        {/* Submit Button */}
+        {/* login/signup button  */}
         <PrimaryButton
           variant="primary"
           loading={loading}
@@ -219,10 +133,8 @@ export default function AuthModal({ isOpen, onClose }) {
           {mode === "login" ? "Log In" : "Create Account"}
         </PrimaryButton>
 
-        {/* Alert Message */}
         <Alert message={message} type={messageType} />
 
-        {/* Toggle Mode */}
         <div className="text-center pt-4 border-t border-[#3a3835]">
           <p className="text-gray-400">
             {mode === "login" ? (
@@ -253,7 +165,6 @@ export default function AuthModal({ isOpen, onClose }) {
   );
 }
 
-// Input Component
 const Input = ({
   type = "text",
   name,
@@ -292,7 +203,6 @@ const Input = ({
   );
 };
 
-// FormField Component
 const FormField = ({ label, children }) => (
   <div>
     <label className="block text-gray-300 font-semibold mb-2 text-sm">
@@ -302,7 +212,6 @@ const FormField = ({ label, children }) => (
   </div>
 );
 
-// Alert Component
 const Alert = ({ message, type = "error" }) => {
   if (!message) return null;
 
@@ -312,8 +221,6 @@ const Alert = ({ message, type = "error" }) => {
   };
 
   return (
-    <div className={`p-4 rounded-lg text-sm font-medium ${styles[type]}`}>
-      {message}
-    </div>
+    <div className={`p-4 rounded-lg text-sm ${styles[type]}`}>{message}</div>
   );
 };
