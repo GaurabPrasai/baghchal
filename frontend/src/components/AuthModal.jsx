@@ -155,10 +155,10 @@ export default function AuthModal({ isOpen, onClose }) {
           {/* Divider */}
           <div className="relative py-2">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#3a3835]"></div>
+              <div className="w-full border-t border-border-muted"></div>
             </div>
             <div className="relative flex justify-center">
-              <span className="px-4 bg-[#2f2d2a] text-gray-400 text-sm font-medium">
+              <span className="px-4 bg-bg-surface text-text-muted text-sm font-medium">
                 Or {mode === "login" ? "sign in" : "sign up"} with email
               </span>
             </div>
@@ -223,14 +223,14 @@ export default function AuthModal({ isOpen, onClose }) {
         <Alert message={message} type={messageType} />
 
         {/* Toggle Mode */}
-        <div className="text-center pt-4 border-t border-[#3a3835]">
-          <p className="text-gray-400">
+        <div className="text-center pt-4 border-t border-border-muted">
+          <p className="text-text-muted">
             {mode === "login" ? (
               <>
                 Don't have an account?{" "}
                 <button
                   onClick={toggleMode}
-                  className="text-[#f95e5e] hover:text-[#e74c4c] font-semibold hover:underline transition-colors"
+                  className="text-primary hover:text-primary-hover font-semibold hover:underline transition-colors"
                 >
                   Sign up here
                 </button>
@@ -240,7 +240,7 @@ export default function AuthModal({ isOpen, onClose }) {
                 Already have an account?{" "}
                 <button
                   onClick={toggleMode}
-                  className="text-[#f95e5e] hover:text-[#e74c4c] font-semibold hover:underline transition-colors"
+                  className="text-primary hover:text-primary-hover font-semibold hover:underline transition-colors"
                 >
                   Log in here
                 </button>
@@ -265,7 +265,7 @@ const Input = ({
   className = "",
 }) => {
   const baseClasses =
-    "w-full p-4 bg-[#1a1a1a] border border-[#3a3835] rounded-lg text-gray-200 placeholder-gray-600 focus:outline-none focus:border-[#f95e5e] transition-all";
+    "w-full p-4 bg-bg-surface-dark border border-border-muted rounded-lg text-text-light placeholder-text-muted focus:outline-none focus:border-primary transition-all";
 
   if (type === "file") {
     return (
@@ -274,7 +274,7 @@ const Input = ({
         name={name}
         accept={accept}
         onChange={onChange}
-        className={`${baseClasses} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#3a3835] file:text-gray-300 hover:file:bg-[#454240] file:cursor-pointer cursor-pointer ${className}`}
+        className={`${baseClasses} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-border-muted file:text-text-light hover:file:bg-border-light file:cursor-pointer cursor-pointer ${className}`}
       />
     );
   }
@@ -295,7 +295,7 @@ const Input = ({
 // FormField Component
 const FormField = ({ label, children }) => (
   <div>
-    <label className="block text-gray-300 font-semibold mb-2 text-sm">
+    <label className="block text-text-light font-semibold mb-2 text-sm">
       {label}
     </label>
     {children}

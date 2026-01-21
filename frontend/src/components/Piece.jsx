@@ -30,26 +30,26 @@ const Piece = ({
 
   // Circle styles based on state
   const getCircleStyle = () => {
-    let fill = "#e8dcc8"; // Matches board background
-    let stroke = "#8b7355"; // Dark brown
+    let fill = "var(--color-piece-bg)"; // Matches board background
+    let stroke = "var(--color-piece-stroke)"; // Dark brown
     let strokeWidth = 2;
 
     if (isSelected) {
-      stroke = "#f95e5e"; // Brand red
+      stroke = "var(--color-piece-selected)"; // Brand red
       strokeWidth = 4;
     } else if (isNewPosition) {
-      stroke = "#4ade80"; // Bright green
+      stroke = "var(--color-piece-new)"; // Bright green
       strokeWidth = 4;
     } else if (isPreviousPosition) {
-      stroke = "#fbbf24"; // Amber
+      stroke = "var(--color-piece-previous)"; // Amber
       strokeWidth = 4;
     } else if (isHighlighted) {
-      stroke = "#10b981"; // Green
+      stroke = "var(--color-piece-highlighted)"; // Green
       strokeWidth = 3;
     } else if (isHovered) {
       strokeWidth = 3;
-      fill = "#f5e6d3"; // Lighter warm tone
-      stroke = "#a68a6a"; // Medium brown
+      fill = "var(--color-piece-hover-fill)"; // Lighter warm tone
+      stroke = "var(--color-piece-stroke-hover)"; // Medium brown
     }
 
     return {

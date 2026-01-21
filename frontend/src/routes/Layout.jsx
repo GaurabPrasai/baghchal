@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 function Layout({ setAuthModalOpen }) {
   return (
-    <div className="flex h-screen w-screen bg-[#262522] overflow-hidden">
+    <div className="flex h-screen w-screen bg-bg-dark overflow-hidden">
       <SideBar setAuthModalOpen={setAuthModalOpen} />
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile top padding to account for fixed navbar */}
@@ -42,10 +42,10 @@ function SideBar({ setAuthModalOpen }) {
   return (
     <>
       {/* Mobile Navigation Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#2f2d2a] border-b border-[#3a3835] px-2 flex items-center justify-between shadow-lg">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-bg-surface border-b border-border-muted px-2 flex items-center justify-between shadow-lg">
         <button
           onClick={toggleMobileMenu}
-          className="p-2 text-gray-300 hover:text-white focus:outline-none transition-colors"
+          className="p-2 text-text-muted hover:text-text-white focus:outline-none transition-colors"
         >
           <svg
             className="w-6 h-6"
@@ -76,7 +76,7 @@ function SideBar({ setAuthModalOpen }) {
             navigate("/");
             setIsMobileMenuOpen(false);
           }}
-          className="text-xl font-bold text-white cursor-pointer hover:text-[#f95e5e] transition-colors"
+          className="text-xl font-bold text-text-white cursor-pointer hover:text-primary transition-colors"
         >
           Bagh Chal
         </div>
@@ -95,7 +95,7 @@ function SideBar({ setAuthModalOpen }) {
       {/* Sidebar */}
       <div
         className={`
-          h-screen bg-[#2f2d2a] border-r border-[#3a3835] z-50 flex flex-col shadow-2xl
+          h-screen bg-bg-surface border-r border-border-muted z-50 flex flex-col shadow-2xl
           md:relative md:translate-x-0 md:h-full
           fixed w-50 top-0 left-0 bottom-0 transform transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
@@ -105,7 +105,7 @@ function SideBar({ setAuthModalOpen }) {
         {/* Mobile Close Button */}
         <button
           onClick={() => setIsMobileMenuOpen(false)}
-          className="md:hidden absolute top-4 left-4 p-2 text-gray-400 hover:text-white transition-colors z-10"
+          className="md:hidden absolute top-4 left-4 p-2 text-text-muted hover:text-text-white transition-colors z-10"
         >
           <svg
             className="w-6 h-6"
@@ -131,25 +131,25 @@ function SideBar({ setAuthModalOpen }) {
                 navigate("/");
                 setIsMobileMenuOpen(false);
               }}
-              className="text-3xl font-bold text-white mb-2 hover:text-[#f95e5e] transition-colors tracking-tight"
+              className="text-3xl font-bold text-text-white mb-2 hover:text-primary transition-colors tracking-tight"
             >
               Bagh Chal
             </button>
-            <div className="w-33 h-1 bg-[#f95e5e] mx-auto rounded"></div>
+            <div className="w-33 h-1 bg-primary mx-auto rounded"></div>
           </div>
 
           {/* User Profile Section */}
-          <div className="bg-[#262522] rounded-xl p-4 mb-8 border border-[#3a3835] shadow-lg">
+          <div className="bg-bg-dark rounded-xl p-4 mb-8 border border-border-muted shadow-lg">
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#f95e5e] to-[#d94545] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary-dark rounded-full mx-auto mb-4 flex items-center justify-center text-text-white text-2xl font-bold shadow-lg">
                 {auth.user?.username?.[0]?.toUpperCase() || "G"}
               </div>
 
-              <div className="text-white font-bold text-xl mb-1">
+              <div className="text-text-white font-bold text-xl mb-1">
                 {auth.user?.username || "Guest Player"}
               </div>
 
-              <div className="text-gray-500 text-sm">
+              <div className="text-text-muted text-sm">
                 {auth.isLoggedIn ? "Player" : "Not logged in"}
               </div>
             </div>
@@ -162,7 +162,7 @@ function SideBar({ setAuthModalOpen }) {
                 navigate("/");
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 text-gray-300 text-base font-semibold hover:text-white hover:bg-[#262522] px-4 py-3 rounded-lg transition-all group"
+              className="w-full flex items-center gap-3 text-text-light text-base font-semibold hover:text-text-white hover:bg-bg-dark px-4 py-3 rounded-lg transition-all group"
             >
               <span className="text-xl">🏠</span>
               <span>Home</span>
@@ -173,7 +173,7 @@ function SideBar({ setAuthModalOpen }) {
                 navigate("/rules");
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 text-gray-300 text-base font-semibold hover:text-white hover:bg-[#262522] px-4 py-3 rounded-lg transition-all group"
+              className="w-full flex items-center gap-3 text-text-light text-base font-semibold hover:text-text-white hover:bg-bg-dark px-4 py-3 rounded-lg transition-all group"
             >
               <span className="text-xl">📖</span>
               <span>Rules</span>
@@ -203,10 +203,10 @@ function SideBar({ setAuthModalOpen }) {
         </div>
 
         {/* Bottom Section - Login/Logout Button */}
-        <div className=" absolute bottom-2 px-4 py-2 w-full border-t-2 border-[#3a3835] shrink-0">
+        <div className=" absolute bottom-2 px-4 py-2 w-full border-t-2 border-border-muted shrink-0">
           <button
             onClick={handleLoginToggle}
-            className="w-full bg-[#f95e5e] text-white px-6 py-3 rounded-lg hover:bg-[#d94545] transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full bg-primary text-text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
           >
             {auth.isLoggedIn ? "Logout" : "Login"}
           </button>

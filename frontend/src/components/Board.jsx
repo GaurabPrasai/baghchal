@@ -120,10 +120,10 @@ const Board = ({
           y1={y}
           x2={padding + boardSize * cellSize}
           y2={y}
-          stroke="#4a4845"
+          stroke="var(--color-stroke-board)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-        />
+        />,
       );
     }
     for (let col = 0; col <= boardSize; col++) {
@@ -135,10 +135,10 @@ const Board = ({
           y1={padding}
           x2={x}
           y2={padding + boardSize * cellSize}
-          stroke="#4a4845"
+          stroke="var(--color-stroke-board)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-        />
+        />,
       );
     }
     return lines;
@@ -164,10 +164,10 @@ const Board = ({
         y1={startY}
         x2={endX}
         y2={endY}
-        stroke="#4a4845"
+        stroke="var(--color-stroke-board)"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-      />
+      />,
     );
     lines.push(
       <line
@@ -176,10 +176,10 @@ const Board = ({
         y1={startY}
         x2={startX}
         y2={endY}
-        stroke="#4a4845"
+        stroke="var(--color-stroke-board)"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-      />
+      />,
     );
 
     // quadrant diagonals
@@ -198,10 +198,10 @@ const Board = ({
           y1={quad.y1}
           x2={quad.x2}
           y2={quad.y2}
-          stroke="#4a4845"
+          stroke="var(--color-stroke-board)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-        />
+        />,
       );
       lines.push(
         <line
@@ -210,10 +210,10 @@ const Board = ({
           y1={quad.y1}
           x2={quad.x1}
           y2={quad.y2}
-          stroke="#4a4845"
+          stroke="var(--color-stroke-board)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-        />
+        />,
       );
     });
 
@@ -244,7 +244,7 @@ const Board = ({
             onHover={handlePieceHover}
             isPreviousPosition={previousPosition === pieceKey}
             isNewPosition={newPosition === pieceKey}
-          />
+          />,
         );
       }
     }
@@ -291,7 +291,7 @@ const Board = ({
           activePiece: null,
         }));
         console.log(
-          `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`
+          `disselected Piece at (${row}, ${col}) with piece: ${pieceType}`,
         );
       } else {
         setboardState((prev) => ({
@@ -299,7 +299,7 @@ const Board = ({
           selectedPiece: pieceKey,
         }));
         console.log(
-          `selected Piece at (${row}, ${col}) with piece: ${pieceType}`
+          `selected Piece at (${row}, ${col}) with piece: ${pieceType}`,
         );
       }
     }
@@ -320,13 +320,13 @@ const Board = ({
         }}
       >
         {/* Decorative corner accents */}
-        <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-[#f95e5e] rounded-tl-lg"></div>
-        <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-[#f95e5e] rounded-tr-lg"></div>
-        <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-[#f95e5e] rounded-bl-lg"></div>
-        <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-[#f95e5e] rounded-br-lg"></div>
+        <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-primary rounded-tl-lg"></div>
+        <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-primary rounded-tr-lg"></div>
+        <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-primary rounded-bl-lg"></div>
+        <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-primary rounded-br-lg"></div>
 
         <div
-          className="border-2 border-[#3a3835] rounded-lg shadow-2xl bg-[#e8dcc8] overflow-hidden"
+          className="border-2 border-border-muted rounded-lg shadow-2xl bg-bg-board overflow-hidden"
           style={{
             width: svgSize + containerPadding,
             height: svgSize + containerPadding,

@@ -15,14 +15,14 @@ const PlayerCard = ({ username, goatPlayer, tigerPlayer, currentPlayer }) => {
         ${
           isPlayerTurn
             ? isPlayerGoat
-              ? "border-[#4ade80] bg-[#44b16c] text-white -lg "
-              : "border-[#f95e5e] bg-[#f95e5e] text-white -lg "
-            : "border-[#3a3835] bg-[#262522] text-gray-200"
+              ? "border-secondary bg-secondary-dark text-text-white -lg "
+              : "border-primary bg-primary text-text-white -lg "
+            : "border-border-muted bg-bg-dark text-text-light"
         }
       `}
     >
       {/* Matchup */}
-      <div className="text-sm font-extrabold truncate">
+      <div className="text-sm font-extrabold truncate text-text-white">
         {playerLabel} <span className="opacity-70">VS</span> {opponentLabel}
       </div>
 
@@ -30,7 +30,7 @@ const PlayerCard = ({ username, goatPlayer, tigerPlayer, currentPlayer }) => {
       <div
         className={`
           text-xs font-bold uppercase tracking-wide mt-1
-          ${isPlayerTurn ? "text-white" : "text-gray-400"}
+          ${isPlayerTurn ? "text-text-white" : "text-text-muted"}
         `}
       >
         {isPlayerTurn ? "Your turn!" : "Opponent’s turn"}

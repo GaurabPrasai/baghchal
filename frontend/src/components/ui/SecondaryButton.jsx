@@ -1,7 +1,7 @@
 const SecondaryButton = ({ onClick, children, loading, className = "" }) => (
   <button
     onClick={onClick}
-    className={`w-full bg-transparent text-gray-200 border-2 border-gray-600 rounded-lg py-4 px-4 text-lg font-semibold hover:bg-gray-800 hover:border-gray-500 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 ${className}`}
+    className={`w-full bg-transparent text-text-light border-2 border-border-muted rounded-lg py-4 px-4 text-lg font-semibold hover:bg-bg-surface hover:border-border-light transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3 ${className}`}
   >
     {loading ? (
       <>

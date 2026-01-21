@@ -1,5 +1,92 @@
 @import "tailwindcss";
 
+@theme {
+  /* Primary Colors - Main brand colors */
+  --color-primary: #f95e5e;
+  --color-primary-hover: #f96666;
+  --color-primary-dark: #d94545;
+
+  /* Secondary Colors - Supporting colors */
+  --color-secondary: #4ade80;
+  --color-secondary-dark: #44b16c;
+  --color-secondary-accent: #10b981;
+
+  /* Text Colors */
+  --color-text-light: #e8dcc8;
+  --color-text-white: #ffffff;
+  --color-text-muted: #9ca3af;
+
+  /* Background Colors */
+  --color-bg-dark: #262522;
+  --color-bg-darker: #1e1911;
+  --color-bg-surface: #2f2d2a;
+  --color-bg-surface-dark: #1a1a1a;
+  --color-bg-board: #e8dcc8;
+
+  /* Border Colors */
+  --color-border-light: #3a3835;
+  --color-border-primary: #f95e5e;
+  --color-border-muted: #4a4845;
+
+  /* Stroke Colors (for SVG/Canvas) */
+  --color-stroke-board: #4a4845;
+  --color-stroke-dark: #8b7355;
+  --color-stroke-light: #a68a6a;
+
+  /* Piece Colors and States */
+  --color-piece-bg: #e8dcc8;
+  --color-piece-stroke: #8b7355;
+  --color-piece-stroke-hover: #a68a6a;
+  --color-piece-hover-fill: #f5e6d3;
+  --color-piece-selected: #f95e5e;
+  --color-piece-new: #4ade80;
+  --color-piece-previous: #fbbf24;
+  --color-piece-highlighted: #10b981;
+
+  /* Status Colors */
+  --color-status-success: #4ade80;
+  --color-status-error: #f95e5e;
+  --color-status-warning: #fbbf24;
+  --color-status-info: #3b82f6;
+
+  /* Game Specific Colors */
+  --color-tiger: #f95e5e;
+  --color-goat: #4ade80;
+
+  /* UI Component Colors */
+  --color-btn-primary: #f95e5e;
+  --color-btn-primary-hover: #f96666;
+  --color-btn-secondary-border: #4a4845;
+  --color-btn-secondary-hover: #1f2937;
+
+  /* Modal & Overlay Colors */
+  --color-modal-bg: #2f2d2a;
+  --color-modal-border: #3a3835;
+
+  /* Accent Colors */
+  --color-accent-amber: #fbbf24;
+
+  /* Pattern & Texture Colors */
+  --color-pattern-wood: #d4c4a8;
+  --color-pattern-marble: #e0d7c3;
+}
+
+
+/* Optional: Alternative themes */
+[data-theme="forest"] {
+  --color-primary: #34d399;
+  --color-primary-hover: #6ee7b7;
+  --color-primary-dark: #059669;
+  --color-tiger: #34d399;
+}
+
+[data-theme="ocean"] {
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-tiger: #3b82f6;
+}
+
 /* Prevent any overflow beyond viewport */
 html,
 body {

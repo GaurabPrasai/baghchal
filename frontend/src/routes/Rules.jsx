@@ -2,15 +2,15 @@ import board from "../assets/board.png";
 
 const Rules = () => {
   return (
-    <div className="font-sans bg-[#262522] text-gray-200 w-full h-full overflow-y-auto">
+    <div className="font-sans bg-bg-dark text-text-light w-full h-full overflow-y-auto">
       {/* Header */}
-      <section className="bg-[#2f2d2a] border-b border-[#3a3835] py-16">
+      <section className="bg-bg-surface border-b border-border-muted py-16">
         <div className="container mx-auto px-4 text-center max-w-6xl">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-text-white mb-4 tracking-tight">
             Bagh Chal Rules
           </h1>
-          <div className="w-20 h-1 bg-[#f95e5e] mx-auto rounded mb-6"></div>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto font-light">
+          <div className="w-20 h-1 bg-primary mx-auto rounded mb-6"></div>
+          <p className="text-xl text-text-muted max-w-3xl mx-auto font-light">
             Master the ancient art of strategic warfare between tigers and goats
           </p>
         </div>
@@ -19,45 +19,45 @@ const Rules = () => {
       <div className="container mx-auto px-4 py-16 max-w-6xl">
         {/* Game Overview */}
         <section className="mb-16">
-          <div className="bg-[#2f2d2a] rounded-xl shadow-2xl p-8 mb-8 border border-[#3a3835]">
-            <h2 className="text-3xl font-bold text-white mb-6">
+          <div className="bg-bg-surface rounded-xl shadow-2xl p-8 mb-8 border border-border-muted">
+            <h2 className="text-3xl font-bold text-text-white mb-6">
               Game Overview
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
-                <p className="text-lg text-gray-300 leading-relaxed">
+                <p className="text-lg text-text-light leading-relaxed">
                   Bagh Chal (Tigers and Goats) is a traditional asymmetric
                   strategy game from Nepal. Two players compete with different
                   pieces and objectives, creating a unique and challenging
                   gameplay experience.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[#262522] p-5 rounded-lg border border-[#3a3835]">
-                    <div className="text-2xl font-bold text-white mb-1">
+                  <div className="bg-bg-dark p-5 rounded-lg border border-border-muted">
+                    <div className="text-2xl font-bold text-text-white mb-1">
                       4 Tigers
                     </div>
-                    <div className="text-sm text-gray-500 uppercase tracking-wide">
+                    <div className="text-sm text-text-muted uppercase tracking-wide">
                       Hunters
                     </div>
                   </div>
-                  <div className="bg-[#262522] p-5 rounded-lg border border-[#3a3835]">
-                    <div className="text-2xl font-bold text-white mb-1">
+                  <div className="bg-bg-dark p-5 rounded-lg border border-border-muted">
+                    <div className="text-2xl font-bold text-text-white mb-1">
                       20 Goats
                     </div>
-                    <div className="text-sm text-gray-500 uppercase tracking-wide">
+                    <div className="text-sm text-text-muted uppercase tracking-wide">
                       Defenders
                     </div>
                   </div>
                 </div>
               </div>
               <div className="flex justify-center">
-                <div className="relative bg-[#262522] p-8 rounded-xl border border-[#3a3835] shadow-xl">
+                <div className="relative bg-bg-dark p-8 rounded-xl border border-border-muted shadow-xl">
                   <img
                     src={board}
                     alt="Bagh Chal game board"
                     className="w-full max-w-80 rounded"
                   />
-                  <div className="absolute -top-3 -right-3 bg-[#f95e5e] text-white text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
+                  <div className="absolute -top-3 -right-3 bg-primary text-text-white text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
                     Traditional
                   </div>
                 </div>
@@ -68,16 +68,18 @@ const Rules = () => {
 
         {/* Setup */}
         <section className="mb-16">
-          <div className="bg-[#2f2d2a] rounded-xl shadow-2xl p-8 border border-[#3a3835]">
-            <h2 className="text-3xl font-bold text-white mb-6">Game Setup</h2>
+          <div className="bg-bg-surface rounded-xl shadow-2xl p-8 border border-border-muted">
+            <h2 className="text-3xl font-bold text-text-white mb-6">
+              Game Setup
+            </h2>
             <div className="space-y-6">
-              <div className="bg-[#262522] border-l-4 border-[#f95e5e] p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-white mb-4">
+              <div className="bg-bg-dark border-l-4 border-primary p-6 rounded-r-lg">
+                <h3 className="text-xl font-semibold text-text-white mb-4">
                   Initial Position
                 </h3>
-                <ul className="space-y-3 text-gray-300">
+                <ul className="space-y-3 text-text-light">
                   <li className="flex items-start">
-                    <span className="text-[#f95e5e] mr-3 mt-1">•</span>
+                    <span className="text-primary mr-3 mt-1">•</span>
                     <span>
                       4 tigers are placed at the four corner points of the board
                     </span>

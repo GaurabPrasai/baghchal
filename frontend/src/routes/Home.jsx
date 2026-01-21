@@ -15,7 +15,7 @@ export default function Home() {
   };
 
   return (
-    <div className=" md:pl-10 font-sans bg-[#262522] text-gray-200 min-h-screen overflow-x-hidden">
+    <div className=" md:pl-10 font-sans bg-bg-dark text-text-light min-h-screen overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-5 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center min-h-[90vh]">
           {/* Content Side */}
@@ -24,12 +24,12 @@ export default function Home() {
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight leading-none">
                 Bagh Chal
               </h1>
-              <p className="text-2xl text-gray-400 font-light">
+              <p className="text-2xl text-text-muted font-light">
                 The Ancient Game of Strategy
               </p>
             </div>
 
-            <p className="text-lg text-gray-400 leading-relaxed max-w-lg mx-auto lg:mx-0">
+            <p className="text-lg text-text-muted leading-relaxed max-w-lg mx-auto lg:mx-0">
               Experience the legendary Nepali board game where cunning tigers
               hunt and strategic goats defend. A timeless battle of wits that
               has captivated minds across the Himalayas for centuries.
@@ -54,20 +54,20 @@ export default function Home() {
 
             <div className="flex gap-10 pt-5 justify-center lg:justify-start">
               <div>
-                <div className="text-3xl font-bold text-white">4</div>
-                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                <div className="text-3xl font-bold text-text-white">4</div>
+                <div className="text-sm text-text-muted uppercase tracking-wide">
                   Tigers
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-white">20</div>
-                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                <div className="text-3xl font-bold text-text-white">20</div>
+                <div className="text-sm text-text-muted uppercase tracking-wide">
                   Goats
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-white">∞</div>
-                <div className="text-sm text-gray-500 uppercase tracking-wide">
+                <div className="text-3xl font-bold text-text-white">∞</div>
+                <div className="text-sm text-text-muted uppercase tracking-wide">
                   Strategy
                 </div>
               </div>
@@ -76,16 +76,16 @@ export default function Home() {
 
           {/* Board Side */}
           <div className="flex justify-center lg:justify-end">
-            <div className="relative bg-[#2f2d2a] p-10 rounded-xl border border-[#3a3835] shadow-2xl">
+            <div className="relative bg-bg-surface p-10 rounded-xl border border-border-muted shadow-2xl">
               <img
                 src={board}
                 alt="Bagh Chal Board"
                 className="w-full max-w-md rounded"
               />
-              <div className="absolute -top-3 -right-3 bg-[#f95e5e] text-white text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
+              <div className="absolute -top-3 -right-3 bg-primary text-text-white text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
                 Traditional
               </div>
-              <div className="absolute -bottom-3 -left-3 bg-[#2f2d2a] border-2 border-[#f95e5e] text-gray-200 text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
+              <div className="absolute -bottom-3 -left-3 bg-bg-surface border-2 border-primary text-text-light text-xs px-4 py-1 rounded-full font-semibold uppercase tracking-wide">
                 Strategic
               </div>
             </div>
